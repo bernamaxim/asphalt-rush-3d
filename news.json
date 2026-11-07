@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-11-07T00:00:00.000Z",
+  "items": [
+    {
+      "id": "combined-racing",
+      "title": "CAR & MOTORCYCLE RACING",
+      "description": "Mobil dan motor dapat dipilih dalam satu game dan bertanding di lintasan yang sama.",
+      "category": "GAMEPLAY",
+      "date": "2026-11-07",
+      "isNew": true,
+      "active": true
+    }
+  ]
+}
