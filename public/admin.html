@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Asphalt & Moto Rush — Admin</title>
+<style>
+:root{color-scheme:dark;--bg:#08111f;--panel:#111f32;--line:#263b55;--gold:#ffc83d;--muted:#9db0c8}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#18304b,#08111f 55%);font:15px Arial,sans-serif;color:#eef5ff}
+header{padding:22px max(18px,calc((100% - 980px)/2));border-bottom:1px solid var(--line);background:#091524dd}
+header b{font-size:20px;letter-spacing:1px}header span{color:var(--gold)}
+main{max-width:980px;margin:26px auto;padding:0 16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 12px 30px #0003}
+h1{font-size:25px;margin:0 0 8px}h2{font-size:18px;margin:0 0 14px}.muted{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:7px;margin:10px 0}
+label{font-size:13px;color:#c7d6e8}input,textarea,select{width:100%;padding:12px;border-radius:9px;border:1px solid #38516e;background:#091626;color:white;font:inherit}
+textarea{min-height:90px;resize:vertical}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button{border:0;border-radius:9px;padding:12px 16px;font-weight:bold;background:var(--gold);color:#101827;cursor:pointer}
+button.secondary{background:#263d58;color:#fff}button.danger{background:#7d2935;color:#fff}
+.item{border:1px solid var(--line);padding:14px;border-radius:12px;margin:10px 0;background:#0c1929}
+.item strong{display:block;margin-bottom:5px}.tag{font-size:11px;color:var(--gold);font-weight:bold}
+.status{margin-top:10px;color:#9fe3b1;min-height:20px}.hidden{display:none}
+@media(max-width:650px){.grid{grid-template-columns:1fr}main{margin-top:14px}.card{padding:15px}}
+</style></head><body>
+<header><b>ASPHALT <span>&</span> MOTO RUSH 3D</b><div class="muted">ADMIN CONTROL CENTER</div></header>
+<main>
+<section class="card"><h1>Update News Manager</h1><div class="muted">Kelola berita, label NEW, dan versi update game dari satu tempat.</div>
+<div class="grid"><div class="field"><label>Admin username</label><input id="username" value="admin" autocomplete="username"></div>
+<div class="field"><label>Admin password</label><input id="password" type="password" autocomplete="current-password" placeholder="Masukkan ADMIN_PASSWORD server"></div></div>
+<div class="row"><button onclick="loadNews()">Hubungkan & Muat Berita</button><span class="muted">Login memakai kredensial server.</span></div><div id="status" class="status"></div></section>
+<section class="card"><h2>Versi Update</h2><div class="field"><label>Nomor versi berita</label><input id="version" value="1.0.0" placeholder="Contoh 1.1.0"></div></section>
+<section class="card"><h2 id="formTitle">Tambah Berita</h2><input id="editId" type="hidden">
+<div class="grid"><div class="field"><label>Judul</label><input id="title" maxlength="100" placeholder="NEW: Tokyo Night Map"></div>
+<div class="field"><label>Kategori</label><select id="category"><option>GAMEPLAY</option><option>VEHICLE</option><option>MAP</option><option>MULTIPLAYER</option><option>EVENT</option><option>UPDATE</option></select></div></div>
+<div class="field"><label>Deskripsi</label><textarea id="description" maxlength="500" placeholder="Jelaskan fitur baru..."></textarea></div>
+<div class="grid"><div class="field"><label>Tanggal</label><input id="date" type="date"></div>
+<div class="field"><label>Status</label><select id="active"><option value="true">Dipublikasikan</option><option value="false">Draft / Nonaktif</option></select></div></div>
+<div class="row"><label><input id="isNew" type="checkbox" checked style="width:auto"> Tampilkan badge NEW</label></div>
+<div class="row" style="margin-top:14px"><button onclick="saveItem()">Simpan Berita</button><button class="secondary" onclick="resetForm()">Bersihkan Form</button><button class="secondary" onclick="publishAll()">Publikasikan ke Game</button></div>
+<div id="saveStatus" class="status"></div></section>
+<section class="card"><h2>Daftar Berita</h2><div id="items" class="muted">Hubungkan ke server untuk memuat berita.</div></section>
+</main>
+<script>
+let items=[], auth='';
+const $=id=>document.getElementById(id);
+function setStatus(t){$('status').textContent=t}
+function credentials(){const raw=$('username').value+':'+$('password').value;auth='Basic '+btoa(unescape(encodeURIComponent(raw)));return auth}
+async function api(url,opts={}){const res=await fetch(url,{...opts,headers:{'Content-Type':'application/json','Authorization':credentials(),...(opts.headers||{})}});if(!res.ok){let m='HTTP '+res.status;try{m=(await res.json()).error||m}catch{}throw Error(m)}return res.json()}
+async function loadNews(){try{const r=await api('/api/news',{method:'GET'});items=r.items||[];$('version').value=r.version||'1.0.0';render();setStatus('Terhubung. '+items.length+' berita dimuat.')}catch(e){setStatus('Gagal: '+e.message)}}
+function resetForm(){$('editId').value='';$('title').value='';$('description').value='';$('category').value='UPDATE';$('date').value=new Date().toISOString().slice(0,10);$('active').value='true';$('isNew').checked=true;$('formTitle').textContent='Tambah Berita'}
+function saveItem(){const title=$('title').value.trim(),description=$('description').value.trim();if(!title||!description){$('saveStatus').textContent='Judul dan deskripsi wajib diisi.';return}
+const id=$('editId').value||('news-'+Date.now());const entry={id,title,description,category:$('category').value,date:$('date').value||new Date().toISOString().slice(0,10),isNew:$('isNew').checked,active:$('active').value==='true'};
+const i=items.findIndex(x=>x.id===id);if(i>=0)items[i]=entry;else items.unshift(entry);render();resetForm();$('saveStatus').textContent='Berita tersimpan di form. Tekan “Publikasikan ke Game” untuk mengirim ke server.'}
+function editItem(id){const x=items.find(v=>v.id===id);if(!x)return;$('editId').value=x.id;$('title').value=x.title;$('description').value=x.description;$('category').value=x.category;$('date').value=x.date;$('active').value=String(x.active!==false);$('isNew').checked=x.isNew!==false;$('formTitle').textContent='Edit Berita'}
+function deleteItem(id){if(!confirm('Hapus berita ini?'))return;items=items.filter(x=>x.id!==id);render()}
+function render(){$('items').innerHTML=items.length?items.map(x=>`<div class="item"><span class="tag">${x.category} ${x.isNew?'• NEW':''} ${x.active?'• LIVE':'• DRAFT'}</span><strong>${esc(x.title)}</strong><div class="muted">${esc(x.description)}</div><div class="row" style="margin-top:10px"><button class="secondary" onclick="editItem('${escAttr(x.id)}')">Edit</button><button class="danger" onclick="deleteItem('${escAttr(x.id)}')">Hapus</button></div></div>`).join(''):'Belum ada berita.'}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function escAttr(s){return esc(s).replace(/`/g,'&#96;')}
+async function publishAll(){try{const r=await api('/api/admin/news',{method:'PUT',body:JSON.stringify({version:$('version').value.trim()||'1.0.0',items})});items=r.news.items;render();$('saveStatus').textContent='Berhasil dipublikasikan ke server. Game dapat mengambil berita terbaru dari /api/news.'}catch(e){$('saveStatus').textContent='Gagal publikasi: '+e.message}}
+resetForm();loadNews();
+</script></body></html>
