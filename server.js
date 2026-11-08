@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
-
+const fs = require('fs');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -222,6 +222,48 @@ io.on('connection', socket => {
 
   socket.on('leave-room', () => leave(socket));
   socket.on('disconnect', () => leave(socket));
+});
+app.use(express.json({ limit: '1mb' }));
+
+function requireAdmin(req, res, next) {
+  const auth = req.headers.authorization || '';
+  const expected = 'Basic ' + Buffer.from(
+    `${process.env.ADMIN_USER || 'admin'}:${process.env.ADMIN_PASSWORD || ''}`
+  ).toString('base64');
+
+  if (!process.env.ADMIN_PASSWORD || auth !== expected) {
+    res.set('WWW-Authenticate', 'Basic realm="Admin"');
+    return res.status(401).send('Unauthorized');
+  }
+
+  next();
+}
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.get('/api/news', (req, res) => {
+  try {
+    const news = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'news.json'), 'utf8')
+    );
+    res.json(news);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load news' });
+  }
+});
+
+app.put('/api/admin/news', requireAdmin, (req, res) => {
+  try {
+    fs.writeFileSync(
+      path.join(__dirname, 'news.json'),
+      JSON.stringify(req.body, null, 2)
+    );
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to save news' });
+  }
 });
 
 const port = process.env.PORT || 3000;
