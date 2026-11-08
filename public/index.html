@@ -1203,7 +1203,65 @@ async function loadNews(){
     console.error("Gagal memuat berita:",error);
   }
 }
+async function checkNewLogs(){
+  try{
+    const response = await fetch("/api/news",{cache:"no-store"});
+    if(!response.ok)return;
 
+    const data = await response.json();
+    const items = Array.isArray(data.items)
+      ? data.items.filter(item=>item && item.active && item.isNew && item.id)
+      : [];
+
+    const readIds = JSON.parse(localStorage.getItem("asphaltReadNews") || "[]");
+    const unread = items.filter(item=>!readIds.includes(item.id));
+
+    if(!unread.length)return;
+
+    const overlay = document.createElement("div");
+    overlay.style.cssText = "position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto;";
+
+    const panel = document.createElement("div");
+    panel.style.cssText = "background:#172943;border:2px solid #ffb000;border-radius:15px;padding:22px;width:min(500px,100%);max-height:85vh;overflow:auto;color:white;text-align:center;";
+
+    const heading = document.createElement("h2");
+    heading.textContent = "🆕 NEW LOGS";
+    heading.style.color = "#ffb000";
+    panel.appendChild(heading);
+
+    unread.forEach(item=>{
+      const card = document.createElement("div");
+      card.style.cssText = "background:#243852;border-radius:10px;padding:13px;margin:12px 0;text-align:left;";
+
+      const title = document.createElement("h3");
+      title.textContent = item.title || "Update baru";
+      title.style.color = "#ffcf42";
+
+      const description = document.createElement("p");
+      description.textContent = item.description || "";
+      description.style.lineHeight = "1.5";
+
+      card.append(title,description);
+      panel.appendChild(card);
+    });
+
+    const button = document.createElement("button");
+    button.textContent = "MENGERTI";
+    button.onclick = ()=>{
+      const updated = [...new Set([...readIds,...unread.map(item=>item.id)])];
+      localStorage.setItem("asphaltReadNews",JSON.stringify(updated));
+      overlay.remove();
+    };
+
+    panel.appendChild(button);
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
+  }catch(error){
+    console.error("NEW LOGS gagal dimuat:",error);
+  }
+}
+
+checkNewLogs();
 updateCoins();
 initMapMenu();
 </script>
