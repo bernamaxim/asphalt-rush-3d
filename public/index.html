@@ -70,6 +70,17 @@ select{background:#24344c;color:white;margin-left:10px}
 .mp-row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:8px 0}
 #mpStatus{font-size:12px;color:#a9c6e8;min-height:18px;margin:7px 0}
 #mpPlayers{font-size:12px;color:#ffe08a;line-height:1.6}
+
+#newsPanel{position:fixed;inset:0;z-index:60;background:rgba(3,8,18,.97);display:none;flex-direction:column;align-items:center;justify-content:flex-start;overflow-y:auto;padding:22px;color:#fff}
+#newsPanel .news-wrap{width:min(720px,96%);margin:12px auto}
+.news-card{background:#172943;border:1px solid #53647b;border-radius:12px;padding:16px;margin:12px 0;text-align:left}
+.news-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px;color:#a9c6e8;margin-bottom:8px}
+.news-category{color:#ffcf42;font-weight:bold;letter-spacing:1px}
+.news-new{background:#ffb000;color:#111;padding:3px 7px;border-radius:5px;font-weight:900}
+.news-card h3{margin:4px 0 9px;color:#ffcf42}
+.news-card p{margin:0;color:#d5e1f0;line-height:1.5;font-size:14px}
+#newsStatus{color:#a9c6e8;font-size:13px;margin:12px}
+
 </style>
 </head>
 <body>
@@ -96,8 +107,19 @@ select{background:#24344c;color:white;margin-left:10px}
 </div>
 <label>Difficulty <select id="difficulty"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard</option><option value="extreme">Extreme</option></select></label>
 </div>
-<button onclick="startGame()">🏁 START RACE</button><button onclick="openGarage()">🚘 GARAGE</button><button onclick="openShop()">🛒 SHOP</button><button class="secondary" onclick="openProgress()">⚙️ UPGRADE & CAREER</button><button class="secondary" onclick="openSettings()">⚙️ PENGATURAN</button><button class="secondary" id="musicToggle" onclick="toggleMusic()">🔊 MUSIC: ON</button>
+<button onclick="startGame()">🏁 START RACE</button><button onclick="openGarage()">🚘 GARAGE</button><button onclick="openShop()">🛒 SHOP</button><button class="secondary" onclick="openProgress()">⚙️ UPGRADE & CAREER</button><button class="secondary" onclick="openSettings()">⚙️ PENGATURAN</button><button class="secondary" id="musicToggle" onclick="toggleMusic()">🔊 MUSIC: ON</button><button class="secondary" onclick="openNews()">📰 NEWS</button>
 </div>
+
+<div id="newsPanel">
+  <h1>📰 GAME NEWS</h1>
+  <div id="newsStatus">Memuat berita...</div>
+  <div class="news-wrap" id="newsList"></div>
+  <div>
+    <button onclick="loadNews()">↻ MUAT ULANG</button>
+    <button class="secondary" onclick="closeNews()">KEMBALI KE MENU</button>
+  </div>
+</div>
+
 <div id="settingsPanel">
  <h1>⚙️ PENGATURAN</h1>
  <div class="panel">
@@ -1139,6 +1161,49 @@ document.addEventListener("pointerdown",()=>{if(musicEnabled)startMusic()},{once
 
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display="none",1600)}
 window.addEventListener("resize",()=>{if(!camera||!renderer)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+
+async function openNews(){
+  document.getElementById("menu").style.display="none";
+  document.getElementById("newsPanel").style.display="flex";
+  await loadNews();
+}
+function closeNews(){
+  document.getElementById("newsPanel").style.display="none";
+  document.getElementById("menu").style.display="flex";
+}
+function escapeNewsText(value){
+  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+async function loadNews(){
+  const status=document.getElementById("newsStatus");
+  const list=document.getElementById("newsList");
+  status.textContent="Memuat berita...";
+  list.innerHTML="";
+  try{
+    const response=await fetch("/api/news",{cache:"no-store"});
+    if(!response.ok)throw new Error("HTTP "+response.status);
+    const data=await response.json();
+    const items=Array.isArray(data.items)?data.items.filter(item=>item&&item.active):[];
+    items.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+    if(!items.length){
+      status.textContent="Belum ada berita aktif.";
+      return;
+    }
+    status.textContent=items.length+" berita tersedia.";
+    list.innerHTML=items.map(item=>{
+      const title=escapeNewsText(item.title||"Tanpa judul");
+      const description=escapeNewsText(item.description||"");
+      const category=escapeNewsText(item.category||"NEWS");
+      const date=escapeNewsText(item.date||"");
+      const badge=item.isNew?'<span class="news-new">NEW</span>':"";
+      return `<article class="news-card"><div class="news-meta"><span class="news-category">${category}</span>${badge}<span>${date}</span></div><h3>${title}</h3><p>${description}</p></article>`;
+    }).join("");
+  }catch(error){
+    status.textContent="Berita belum bisa dimuat. Periksa koneksi server.";
+    console.error("Gagal memuat berita:",error);
+  }
+}
+
 updateCoins();
 initMapMenu();
 </script>
@@ -1161,4 +1226,4 @@ initMapMenu();
 </div>
 <div id="raceToast"></div>
 </body>
-</html>
+                                                                                                                                                    </html>
