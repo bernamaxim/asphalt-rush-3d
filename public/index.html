@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Asphalt & Moto Rush 3D</title>
+<title>Asphalt Rush 3D</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;overflow:hidden;background:#080d18;color:white;font-family:Arial,sans-serif}
@@ -31,14 +31,8 @@ select{background:#24344c;color:white;margin-left:10px}
 #steeringWheel:before{content:'';position:absolute;left:calc(50% - 7px);top:3px;width:14px;height:132px;background:linear-gradient(#8794a4,#26313e);border-radius:5px}
 #steeringWheel:after{content:'';position:absolute;left:4px;top:calc(50% - 7px);width:132px;height:14px;background:linear-gradient(90deg,#8794a4,#26313e);border-radius:5px}
 #steeringCaption{position:absolute;bottom:-12px;left:0;right:0;text-align:center;font-size:12px;color:#fff;text-shadow:0 1px 3px black}
-/* Saat memakai motor, kontrol visual berubah dari setir menjadi stang motor. */
-#controls.bike-mode #steeringWheel{width:178px;height:116px;border:0;border-radius:0;background:none;box-shadow:none}
-#controls.bike-mode #steeringWheel:before{left:10px;top:34px;width:158px;height:15px;border-radius:10px;background:linear-gradient(180deg,#cbd5df,#465362 55%,#202a35);box-shadow:0 3px 6px #0009}
-#controls.bike-mode #steeringWheel:after{left:calc(50% - 7px);top:43px;width:14px;height:42px;border-radius:5px;background:linear-gradient(90deg,#cbd5df,#465362);box-shadow:0 2px 4px #0008}
-#controls.bike-mode #steeringPad{height:145px}
-#controls.bike-mode #steeringWheel{filter:drop-shadow(0 4px 5px #0009)}
 #rotate{display:none!important}
-#shop,#garage,#result,#pauseScreen,#countdown,#updateNews{display:none}
+#shop,#garage,#result,#pauseScreen,#countdown{display:none}
 #mapPanel{width:min(440px,70vw);background:rgba(0,0,0,.72);border:1px solid #60738d;border-radius:8px;padding:7px 10px;margin:0 0 5px 3px}
 .mapLabel{display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px;color:#ffe08a}
 #mapTrack{height:12px;background:#455366;border-radius:10px;position:relative;overflow:visible}
@@ -57,29 +51,6 @@ select{background:#24344c;color:white;margin-left:10px}
 .item p{font-size:12px;color:#b7c8df}
 .coins{color:#ffce35;font-weight:bold}
 #garageCar{font-size:70px;margin:10px}
-.newBadge{display:inline-block;margin-left:7px;padding:3px 7px;border-radius:6px;background:#ff3155;color:#fff;font-size:10px;font-weight:900;letter-spacing:.5px;vertical-align:middle;box-shadow:0 0 10px #ff315588;animation:newPulse 1.4s infinite}
-@keyframes newPulse{50%{filter:brightness(1.35);transform:scale(1.06)}}
-#updateNews{position:fixed;inset:0;z-index:55;background:rgba(2,7,18,.98);display:none;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:clamp(18px,4vh,38px) 16px 22px;overflow:auto}
-.newsHeader{position:relative;width:min(760px,96vw);padding:12px 48px 0}
-.newsHeader h1{font-size:clamp(34px,6vw,62px);margin:0;text-shadow:0 0 22px #ff6500}
-.newsHeader .subtitle{letter-spacing:4px;font-size:11px;margin:8px 0 24px}
-.newsClose{position:absolute;right:0;top:0;width:42px;height:42px;padding:0;margin:0;border-radius:50%;font-size:25px;line-height:1;background:#27364d;color:#fff;border:1px solid #7186a4}
-#updateNews .newsCard{width:min(570px,94vw);max-height:65vh;overflow:auto;text-align:left;background:#14243a;border:1px solid #526a89;border-radius:16px;padding:16px 18px;margin:8px auto 12px;box-shadow:0 12px 35px #0008}
-.newsItem{padding:12px 4px;border-bottom:1px solid #ffffff22;line-height:1.45;font-size:16px}
-.newsItem:last-child{border:0}
-.newsDate{font-size:11px;color:#9eb5d4;margin-bottom:7px}
-.newsCategory{display:inline-block;color:#9fc4ef;font-size:10px;font-weight:bold;letter-spacing:1px;margin:0 0 5px}
-.newsNew{display:inline-block;background:#ff3155;color:white;border-radius:5px;padding:2px 6px;font-size:9px;margin-left:6px;vertical-align:2px}
-.newsActions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:4px}
-#newLogsPopup{position:fixed;inset:0;z-index:70;background:rgba(0,4,12,.94);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;overflow-x:hidden;overflow-y:auto}
-#newLogsPopup .newsHeader{box-sizing:border-box;width:min(760px,calc(100vw - 36px));max-width:100%;padding:0 10px;flex:0 0 auto}
-#newLogsPopup .newsHeader h1{font-size:clamp(34px,6vw,62px)}
-#newLogsPopup .newsCard{box-sizing:border-box;width:min(570px,calc(100vw - 36px));max-width:100%;max-height:62vh;overflow-x:hidden;overflow-y:auto;text-align:left;background:#14243a;border:1px solid #526a89;border-radius:16px;padding:16px 18px;margin:12px auto 10px;box-shadow:0 12px 35px #0008;flex:0 0 auto}
-#newLogsPopup .newsItem{font-size:16px}
-#newLogsPopup .newsDate{font-size:11px}
-.newsItem{padding:12px 4px;border-bottom:1px solid #ffffff22;line-height:1.45}
-.newsItem:last-child{border:0}
-.newsDate{font-size:11px;color:#9eb5d4;margin-bottom:4px}
 #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:50;background:#111e32;border:1px solid #ffb000;padding:12px 20px;border-radius:8px;display:none}
 #settingsPanel{position:fixed;inset:0;z-index:45;background:rgba(3,8,18,.96);display:none;flex-direction:column;align-items:center;justify-content:flex-start;overflow-y:auto;text-align:center;padding:20px}
 #settingsPanel .panel{max-width:420px}
@@ -94,16 +65,16 @@ select{background:#24344c;color:white;margin-left:10px}
 .progressStat{color:#ffcf42;font-weight:bold}
 #raceToast{position:fixed;top:30%;left:50%;transform:translateX(-50%);z-index:50;font-size:25px;font-weight:900;color:#ffdf58;text-shadow:0 2px 8px #000;pointer-events:none;opacity:0}
 
-#multiplayerPanel{width:100%;max-width:100%;min-width:0;box-sizing:border-box;margin:10px 0;padding:14px;background:rgba(9,22,42,.94);border:1px solid #3b587d;border-radius:14px;color:#fff}
+#multiplayerPanel{width:min(94vw,520px);margin:10px auto;padding:14px;background:rgba(9,22,42,.94);border:1px solid #3b587d;border-radius:14px;color:#fff}
 #multiplayerPanel input{width:130px;text-transform:uppercase;text-align:center;letter-spacing:3px;font-weight:900}
-.mp-row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:8px 0;max-width:100%;width:100%;min-width:0} #multiplayerPanel button{max-width:100%;white-space:normal} #multiplayerPanel input{max-width:100%;min-width:0}
+.mp-row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:8px 0}
 #mpStatus{font-size:12px;color:#a9c6e8;min-height:18px;margin:7px 0}
 #mpPlayers{font-size:12px;color:#ffe08a;line-height:1.6}
 </style>
 </head>
 <body>
 <div id="menu">
-<h1>ASPHALT &amp; MOTO RUSH 3D</h1><div class="subtitle">CARS • MOTORCYCLES • EXTREME RACING</div>
+<h1>ASPHALT RUSH 3D</h1><div class="subtitle">EXTREME STREET RACING</div>
 <div class="panel">
 <div class="coins">🪙 Koin: <span id="menuCoins">0</span></div>
 <label>Jumlah Rival <select id="botCount"><option value="2">2 Rival</option><option value="3" selected>3 Rival</option><option value="5">5 Rival</option></select></label>
@@ -125,29 +96,7 @@ select{background:#24344c;color:white;margin-left:10px}
 </div>
 <label>Difficulty <select id="difficulty"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard</option><option value="extreme">Extreme</option></select></label>
 </div>
-<button onclick="startGame()">🏁 START RACE</button><button onclick="openGarage()">🚘 GARAGE <span class="newBadge" data-new-badge>NEW</span></button><button onclick="openShop()">🛒 SHOP <span class="newBadge" data-new-badge>NEW</span></button><button class="secondary" onclick="openProgress()">⚙️ UPGRADE & CAREER</button><button class="secondary" onclick="openSettings()">⚙️ PENGATURAN</button><button class="secondary" id="updateNewsButton" onclick="openUpdateNews()">📰 UPDATE NEWS <span class="newBadge" data-new-badge>NEW</span></button><button class="secondary" id="musicToggle" onclick="toggleMusic()">🔊 MUSIC: ON</button>
-</div>
-<div id="updateNews">
- <div class="newsHeader"><button class="newsClose" aria-label="Tutup Update News" onclick="closeUpdateNews()">×</button><h1>📰 UPDATE NEWS</h1><div class="subtitle">WHAT'S NEW IN ASPHALT &amp; MOTO RUSH 3D</div></div>
- <div id="updateNewsList"><div class="newsCard">
-  <div class="newsItem"><div class="newsDate">UPDATE TERBARU • 7 NOVEMBER 2026</div><span class="newsCategory">GAMEPLAY</span><span class="newsNew">NEW</span><br><b>🏎️🏍️ CAR &amp; MOTORCYCLE RACING</b><br>Mobil dan motor berada dalam satu game dan dapat bertanding di lintasan yang sama.</div>
-  <div class="newsItem"><span class="newsCategory">CAMERA</span><br><b>📷 FIRST PERSON CAMERA</b><br>Pilihan kamera First Person untuk pengalaman berkendara dari posisi pengemudi atau pengendara.</div>
-  <div class="newsItem"><span class="newsCategory">CONTROL</span><br><b>🏍️ MOTORCYCLE HANDLEBAR</b><br>Kontrol visual berubah menjadi stang saat menggunakan motor.</div>
-  <div class="newsItem"><span class="newsCategory">VISUAL</span><br><b>🛞 WHEEL ANIMATION</b><br>Roda motor berputar mengikuti kecepatan kendaraan.</div>
-  <div class="newsItem"><span class="newsCategory">PROGRESSION</span><br><b>🎮 GARAGE &amp; PROGRESSION</b><br>Pilih kendaraan, kumpulkan koin, dan tingkatkan performa kendaraan.</div>
- </div></div>
- <div class="newsActions"><button onclick="reloadUpdateNews()">⟳ MUAT ULANG</button></div>
-</div>
-<div id="newLogsPopup">
- <div class="newsHeader"><h1>📰 UPDATE NEWS</h1><div class="subtitle">WHAT'S NEW IN ASPHALT &amp; MOTO RUSH 3D</div></div>
- <div class="newsCard">
-  <div class="newsItem"><div class="newsDate">UPDATE TERBARU • 7 NOVEMBER 2026</div><span class="newsCategory">GAMEPLAY</span><span class="newsNew">NEW</span><br><b>🏎️🏍️ CAR &amp; MOTORCYCLE RACING</b><br>Mobil dan motor berada dalam satu game dan dapat bertanding di lintasan yang sama.</div>
-  <div class="newsItem"><span class="newsCategory">CAMERA</span><br><b>📷 FIRST PERSON CAMERA</b><br>Pilihan kamera First Person untuk pengalaman berkendara dari posisi pengemudi atau pengendara.</div>
-  <div class="newsItem"><span class="newsCategory">CONTROL</span><br><b>🏍️ MOTORCYCLE HANDLEBAR</b><br>Kontrol visual berubah menjadi stang saat menggunakan motor.</div>
-  <div class="newsItem"><span class="newsCategory">VISUAL</span><br><b>🛞 WHEEL ANIMATION</b><br>Roda motor berputar mengikuti kecepatan kendaraan.</div>
-  <div class="newsItem"><span class="newsCategory">PROGRESSION</span><br><b>🎮 GARAGE &amp; PROGRESSION</b><br>Pilih kendaraan, kumpulkan koin, dan tingkatkan performa kendaraan.</div>
- </div>
- <button onclick="dismissNewLogs()">MENGERTI</button>
+<button onclick="startGame()">🏁 START RACE</button><button onclick="openGarage()">🚘 GARAGE</button><button onclick="openShop()">🛒 SHOP</button><button class="secondary" onclick="openProgress()">⚙️ UPGRADE & CAREER</button><button class="secondary" onclick="openSettings()">⚙️ PENGATURAN</button><button class="secondary" id="musicToggle" onclick="toggleMusic()">🔊 MUSIC: ON</button>
 </div>
 <div id="settingsPanel">
  <h1>⚙️ PENGATURAN</h1>
@@ -218,8 +167,8 @@ select{background:#24344c;color:white;margin-left:10px}
 </div>
 <div class="control-group"><button id="brake" class="secondary">▼</button><button id="nitro">NITRO</button><button id="accelerate" class="secondary">▲</button></div>
 </div>
-<div id="shop"><h2>🛒 RACING SHOP</h2><div class="coins">🪙 Koin: <span id="shopCoins">0</span></div><h3>AKSESORI KENDARAAN</h3><div class="items" id="accessoryItems"></div><button class="secondary" onclick="closeShop()">KEMBALI</button></div>
-<div id="garage"><h2>🚘 🏍️ VEHICLE GARAGE</h2><div class="coins">🪙 Koin: <span id="garageCoins">0</span></div><div id="garageCar">🏎️</div><h3 id="carName">Starter Car</h3><div id="carDescription"></div><div class="items" id="carItems"></div><button class="secondary" onclick="closeGarage()">KEMBALI</button></div>
+<div id="shop"><h2>🛒 RACING SHOP</h2><div class="coins">🪙 Koin: <span id="shopCoins">0</span></div><h3>AKSESORI MOBIL</h3><div class="items" id="accessoryItems"></div><button class="secondary" onclick="closeShop()">KEMBALI</button></div>
+<div id="garage"><h2>🚘 GARAGE</h2><div class="coins">🪙 Koin: <span id="garageCoins">0</span></div><div id="garageCar">🏎️</div><h3 id="carName">Starter Car</h3><div id="carDescription"></div><div class="items" id="carItems"></div><button class="secondary" onclick="closeGarage()">KEMBALI</button></div>
 <div id="countdown">
   <div id="countdownNumber">3</div>
   <div class="countdownCaption">GET READY!</div>
@@ -240,56 +189,12 @@ let saveData;try{saveData=JSON.parse(localStorage.getItem("asphaltRushSave_v2"))
 saveData.coins=Number(saveData.coins)||0;saveData.ownedCars=Array.isArray(saveData.ownedCars)?saveData.ownedCars:[0];saveData.accessories=Array.isArray(saveData.accessories)?saveData.accessories:[];saveData.equipped=Array.isArray(saveData.equipped)?saveData.equipped:[];saveData.upgrades=saveData.upgrades||{engine:0,handling:0,nitro:0};saveData.xp=Number(saveData.xp)||0;saveData.level=Number(saveData.level)||1;saveData.achievements=Array.isArray(saveData.achievements)?saveData.achievements:[];saveData.races=Number(saveData.races)||0;
 function save(){localStorage.setItem("asphaltRushSave_v2",JSON.stringify(saveData));updateCoins()}
 function updateCoins(){["menuCoins","shopCoins","garageCoins"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=saveData.coins})}
-const GAME_NEWS_VERSION="2026-11-08-new-logs-design";
-const NEWS_PAGE_SEEN_KEY="asphaltNewsPageSeenVersion";
-const NEW_LOGS_SEEN_KEY="asphaltNewLogsSeenVersion";
-function refreshNewsBadges(){const seen=localStorage.getItem(NEWS_PAGE_SEEN_KEY);document.querySelectorAll("[data-new-badge]").forEach(el=>el.style.display=seen===GAME_NEWS_VERSION?"none":"inline-block")}
-function escapeNewsHtml(value){return String(value??"").replace(/[&<>\\"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'\\"':"&quot;","'":"&#39;"}[ch]))}
-function renderNewsItems(items){
- const active=(Array.isArray(items)?items:[]).filter(item=>item&&item.active!==false);
- active.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
- const html=active.length?active.map(item=>{
-  const date=escapeNewsHtml(item.date||"");
-  const category=escapeNewsHtml(item.category||"NEWS");
-  const title=escapeNewsHtml(item.title||"Tanpa judul");
-  const description=escapeNewsHtml(item.description||"");
-  const badge=item.isNew?'<span class="newsNew">NEW</span>':"";
-  return `<div class="newsItem"><div class="newsDate">${date}</div><span class="newsCategory">${category}</span>${badge}<br><b>${title}</b><br>${description}</div>`;
- }).join(""):'<div class="newsItem">Belum ada berita yang dipublikasikan.</div>';
- const main=document.querySelector("#updateNewsList .newsCard");
- if(main)main.innerHTML=html;
- const popup=document.querySelector("#newLogsPopup .newsCard");
- if(popup)popup.innerHTML=html;
- return active.length;
-}
-async function loadUpdateNews(){
- try{
-  const response=await fetch("/api/news",{cache:"no-store"});
-  if(!response.ok)throw new Error("HTTP "+response.status);
-  const data=await response.json();
-  const count=renderNewsItems(data.items);
-  return count;
- }catch(error){
-  console.error("Gagal memuat Update News:",error);
-  showToast("Berita gagal dimuat dari server");
-  return 0;
- }
-}
-function openUpdateNews(){document.getElementById("updateNews").style.display="flex";localStorage.setItem(NEWS_PAGE_SEEN_KEY,GAME_NEWS_VERSION);refreshNewsBadges();loadUpdateNews()}
-function closeUpdateNews(){document.getElementById("updateNews").style.display="none"}
-async function reloadUpdateNews(){await loadUpdateNews();showToast("UPDATE NEWS berhasil dimuat ulang")}
-function dismissNewLogs(){const popup=document.getElementById("newLogsPopup");if(popup)popup.style.display="none";localStorage.setItem(NEW_LOGS_SEEN_KEY,GAME_NEWS_VERSION);refreshNewsBadges()}
-function showNewLogsIfNeeded(){const popup=document.getElementById("newLogsPopup");if(popup&&localStorage.getItem(NEW_LOGS_SEEN_KEY)!==GAME_NEWS_VERSION){popup.style.display="flex";loadUpdateNews()}refreshNewsBadges()}
-
 const cars=[
 {name:"Starter Car",price:0,color:0xff2020,icon:"🏎️",description:"Mobil awal untuk memulai balapan."},
 {name:"Street Racer",price:500,color:0x00aaff,icon:"🚗",description:"Mobil sport untuk jalanan kota."},
 {name:"Thunder GT",price:1200,color:0xffcc00,icon:"🏎️",description:"Mobil sport berperforma tinggi."},
 {name:"Shadow X",price:2500,color:0x9900ff,icon:"🚘",description:"Mobil balap eksklusif."},
-{name:"Hyper Beast",price:5000,color:0x00ff88,icon:"🏎️",description:"Supercar kelas tertinggi."},
-{name:"Street 250",price:0,color:0xe23d35,icon:"🏍️",description:"Motor sport untuk memulai balapan.",type:"bike"},
-{name:"Racer 600",price:1800,color:0x2688d0,icon:"🏍️",description:"Motor sport dengan tenaga dan handling lebih baik.",type:"bike"},
-{name:"Superbike X",price:4200,color:0xe5b52d,icon:"🏍️",description:"Superbike berperforma tinggi.",type:"bike"}];
+{name:"Hyper Beast",price:5000,color:0x00ff88,icon:"🏎️",description:"Supercar kelas tertinggi."}];
 const accessories=[
 {id:"spoiler",name:"Racing Spoiler",price:250,icon:"🏁",description:"Spoiler belakang racing."},
 {id:"neon",name:"Neon Light",price:350,icon:"💡",description:"Lampu neon bawah mobil."},
@@ -388,7 +293,7 @@ function mpUpdateRemoteCars(dt){
  if(!mpActive||!scene||!player)return;
  const now=performance.now();
  Object.entries(mpPlayers).forEach(([id,p])=>{if(id===mpSocket?.id||typeof p.distance!=='number')return;let mesh=mpRemoteCars[id];if(!mesh){mesh=createCar(p.color||0x00d9ff,0,0);scene.add(mesh);mpRemoteCars[id]=mesh;}
-  const d=p.distance;const z=player.position.z+(raceDistance-d);const x=roadCenter(d)+(Number(p.lane)||0)*3;mesh.position.x=THREE.MathUtils.damp(mesh.position.x,x,12,dt);mesh.position.z=THREE.MathUtils.damp(mesh.position.z,z,12,dt);mesh.position.y=carRideY(d);mesh.rotation.x=roadPitch(d);mesh.rotation.y=THREE.MathUtils.damp(mesh.rotation.y,roadAngle(d),8,dt);if(mesh.userData.wheels)mesh.userData.wheels.forEach(w=>w.rotation.x+=(Math.max(0,Number(p.speed)||0)/3.6)*dt/WHEEL_RADIUS);
+  const d=p.distance;const z=player.position.z+(raceDistance-d);const x=roadCenter(d)+(Number(p.lane)||0)*3;mesh.position.x=THREE.MathUtils.damp(mesh.position.x,x,12,dt);mesh.position.z=THREE.MathUtils.damp(mesh.position.z,z,12,dt);mesh.position.y=carRideY(d);mesh.rotation.x=roadPitch(d);mesh.rotation.y=THREE.MathUtils.damp(mesh.rotation.y,roadAngle(d),8,dt);if(mesh.userData.wheels)mesh.userData.wheels.forEach(w=>w.rotation.x+=(Math.max(0,Number(p.speed)||0)/3.6)*dt/WHEEL_RADIUS*.12);
  });
  Object.keys(mpRemoteCars).forEach(id=>{if(!mpPlayers[id]){scene.remove(mpRemoteCars[id]);delete mpRemoteCars[id]}});
 }
@@ -403,14 +308,7 @@ const ROAD_HALF_THICKNESS=.06;
 const WHEEL_CENTER_Y=.38;
 const WHEEL_RADIUS=.37;
 const CAR_RIDE_HEIGHT=ROAD_HALF_THICKNESS+WHEEL_RADIUS-WHEEL_CENTER_Y+0.018;
-function carRideY(distance){
- const bike = cars[saveData.selectedCar]?.type === "bike";
- // Motorcycle wheels are centered higher than car wheels and have a larger outer radius.
- const rideOffset = bike
-   ? ROAD_HALF_THICKNESS + .51 - .48 + .025
-   : CAR_RIDE_HEIGHT;
- return roadHeight(distance) + rideOffset;
-}
+function carRideY(distance){return roadHeight(distance)+CAR_RIDE_HEIGHT;}
 const MAP_THEMES={
  city:{name:"City Rush",sky:0x87ceeb,fog:0x87ceeb,ground:0x287b32,road:0x292929,edge:0xf0f0f0,fogNear:120,fogFar:440,description:"Lintasan kota dengan pepohonan dan gedung-gedung."},
  desert:{name:"Desert Canyon",sky:0xf2a46f,fog:0xe9a16d,ground:0xb98243,road:0x3b3430,edge:0xf4d49a,fogNear:105,fogFar:390,description:"Gurun luas dengan tebing batu dan suasana senja."},
@@ -418,7 +316,7 @@ const MAP_THEMES={
 };
 let selectedMap=localStorage.getItem("asphaltSelectedMap")||"city";
 let activeWorldMap=null;
-let activeWorldDifficulty=null, activeWorldVehicleIndex=-1;
+let activeWorldDifficulty=null;
 let weatherMode=localStorage.getItem("asphaltWeatherMode")||"clear";
 if(!["clear","morning","sunset","night","rain","fog"].includes(weatherMode))weatherMode="clear";
 let weatherRain=null,weatherRainPositions=null,weatherAmbient=null,weatherSun=null;
@@ -448,107 +346,6 @@ function roadPitch(distance){
 }
 function mat(color,metalness=0,roughness=.7){return new THREE.MeshStandardMaterial({color,metalness,roughness})}
 function box(w,h,d,color,x,y,z,parent=scene){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(color));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
-function createMotorcycle(color,x,z){
- // Recognizable sport motorcycle: wide tires, alloy rims, front forks, fairings,
- // tank, seat, handlebars and a tucked rider. Front of the bike points toward -Z.
- const g=new THREE.Group();
- const paint=mat(color,.42,.27), paintDark=mat(0x182330,.28,.42), rubber=mat(0x090b0e,.02,.96);
- const metal=mat(0xaeb8c2,.82,.24), darkMetal=mat(0x303b46,.68,.34);
- const glass=new THREE.MeshStandardMaterial({color:0x79cce9,metalness:.25,roughness:.16,transparent:true,opacity:.78});
- const black=mat(0x101820,.15,.6), red=mat(0xe52e3c,.12,.4), lamp=mat(0xfff0bd,.15,.2);
- const wheels=[];
- function part(geo,material,pos,rot,parent=g){const m=new THREE.Mesh(geo,material);m.position.set(...pos);if(rot)m.rotation.set(...rot);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
- function beam(a,b,r,material,parent=g){const A=new THREE.Vector3(...a),B=new THREE.Vector3(...b),d=new THREE.Vector3().subVectors(B,A);const m=part(new THREE.CylinderGeometry(r,r,d.length(),12),material,[(A.x+B.x)/2,(A.y+B.y)/2,(A.z+B.z)/2],null,parent);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());return m;}
- // Wheels and rotating brake/rim assembly. The torus plane is vertical (YZ).
- let frontSteer=null;
- for(const wz of [-1.08,1.08]){
-  // Pivot kemudi terpisah dari pivot putaran ban agar roda tidak bergoyang.
-  const steeringPivot=new THREE.Group();
-  steeringPivot.position.set(0,.48,wz);
-  g.add(steeringPivot);
-  if(wz<0) frontSteer=steeringPivot;
-  const pivot=new THREE.Group();
-  steeringPivot.add(pivot);
-  part(new THREE.TorusGeometry(.405,.105,18,56),rubber,[0,0,0],[0,Math.PI/2,0],pivot);
-  part(new THREE.CylinderGeometry(.285,.285,.12,40),darkMetal,[0,0,0],[0,0,Math.PI/2],pivot);
-  part(new THREE.CylinderGeometry(.235,.235,.025,40),metal,[0,0,0],[0,0,Math.PI/2],pivot);
-  part(new THREE.TorusGeometry(.205,.018,8,40),mat(0xd9e0e6,.8,.25),[0,0,0],[0,Math.PI/2,0],pivot);
-  // spokes from hub to rim
-  for(let i=0;i<10;i++){const a=i*Math.PI/5;beam([-.045,Math.cos(a)*.055,Math.sin(a)*.055],[.045,Math.cos(a)*.245,Math.sin(a)*.245],.009,metal,pivot);}
-  part(new THREE.CylinderGeometry(.075,.075,.17,20),black,[0,0,0],[0,0,Math.PI/2],pivot);
-  // visible perforated brake disc on each outer side
-  for(const side of [-1,1]){
-   part(new THREE.TorusGeometry(.17,.018,8,32),metal,[side*.073,0,0],[0,Math.PI/2,0],pivot);
-  }
-  wheels.push(pivot);
- }
- // Chassis, swingarm, engine block and exhaust.
- beam([0,.67,.78],[0,1.02,-.35],.075,darkMetal);
- beam([0,.67,.78],[0,.78,-.35],.055,metal);
- beam([0,.69,.72],[0,.48,1.04],.055,metal);
- part(new THREE.BoxGeometry(.48,.46,.52),darkMetal,[0,.76,.22]);
- part(new THREE.BoxGeometry(.52,.20,.42),metal,[0,.52,.18]);
- part(new THREE.CylinderGeometry(.095,.095,.42,16),black,[.29,.62,.35],[Math.PI/2,0,0]);
- // Rear seat and tail cowl.
- const seat=part(new THREE.BoxGeometry(.48,.16,.72),black,[0,1.02,.52],[.08,0,0]);
- const tail=part(new THREE.SphereGeometry(1,20,14),paint,[0,1.19,.91]);tail.scale.set(.27,.16,.42);tail.rotation.x=-.16;
- part(new THREE.BoxGeometry(.17,.045,.035),red,[0,1.24,1.30]);
- // Fuel tank: broad, raised and clearly visible.
- const tank=part(new THREE.SphereGeometry(1,24,18),paint,[0,1.22,-.20]);tank.scale.set(.40,.31,.53);
- const tankTop=part(new THREE.SphereGeometry(1,20,14),paint,[0,1.39,-.30]);tankTop.scale.set(.30,.10,.34);
- // Full front and side fairings make the silhouette read as a sportbike, not a bicycle.
- const nose=part(new THREE.SphereGeometry(1,24,18),paint,[0,1.02,-.86]);nose.scale.set(.34,.38,.43);
- const lowerNose=part(new THREE.BoxGeometry(.50,.24,.50),paintDark,[0,.76,-.72],[.18,0,0]);
- const screen=part(new THREE.SphereGeometry(1,20,14),glass,[0,1.36,-.78]);screen.scale.set(.235,.25,.20);
- for(const side of [-1,1]){
-  const fair=part(new THREE.SphereGeometry(1,22,16),paint,[side*.29,.91,-.43]);fair.scale.set(.19,.36,.59);fair.rotation.x=-.10;
-  const lower=part(new THREE.SphereGeometry(1,18,12),paintDark,[side*.23,.64,-.30]);lower.scale.set(.16,.18,.42);
-  // colored side stripe and air intake
-  part(new THREE.BoxGeometry(.025,.075,.42),mat(0xf2f4f6,.15,.4),[side*.445,.92,-.43],[.08,0,side*.12]);
-  part(new THREE.BoxGeometry(.025,.12,.19),black,[side*.454,.83,-.30],[0,0,side*.12]);
-  // front forks and rear shock
-  beam([side*.14,.49,-1.08],[side*.17,1.04,-.65],.043,metal);
-  beam([side*.14,.89,.66],[side*.14,.53,1.02],.032,metal);
-  // foot pegs
-  beam([side*.18,.70,.34],[side*.39,.68,.34],.035,darkMetal);
-  // mirrors
-  beam([side*.13,1.34,-.72],[side*.32,1.53,-.85],.018,metal);
-  const mirror=part(new THREE.BoxGeometry(.16,.075,.06),black,[side*.35,1.55,-.87],[0,0,side*.12]);
-  // twin headlamps on front fairing
-  part(new THREE.BoxGeometry(.15,.09,.045),lamp,[side*.14,.99,-1.245],[.12,0,0]);
- }
- // Handlebar stem and wide clip-on bars, clearly visible ahead of the rider.
- beam([0,1.05,-.67],[0,1.30,-.77],.045,metal);
- beam([-.53,1.30,-.77],[.53,1.30,-.77],.035,darkMetal);
- for(const side of [-1,1]){
-  part(new THREE.CylinderGeometry(.055,.055,.23,12),black,[side*.52,1.30,-.77],[0,0,Math.PI/2]);
-  part(new THREE.SphereGeometry(.065,12,10),metal,[side*.59,1.30,-.77]);
- }
- // Exhaust canister on the right side.
- beam([.25,.57,.38],[.34,.70,.94],.075,darkMetal);
- part(new THREE.CylinderGeometry(.075,.09,.28,18),metal,[.34,.70,.98],[Math.PI/2,0,0]);
- part(new THREE.CylinderGeometry(.052,.052,.025,16),black,[.34,.70,1.13],[Math.PI/2,0,0]);
- // Rider: tucked racing posture, connected arms to handlebars and bent legs to pegs.
- const rider=new THREE.Group();g.add(rider);
- const suit=mat(0x151d28,.12,.62), suitAccent=mat(0xe22c3b,.12,.42), helmetMat=mat(0xf4f6f8,.28,.2), visorMat=mat(0x172c3d,.55,.12);
- const torso=part(new THREE.SphereGeometry(1,22,16),suit,[0,1.56,.03],[-.58,0,0],rider);torso.scale.set(.29,.37,.43);
- const chest=part(new THREE.SphereGeometry(1,18,14),suitAccent,[0,1.61,-.17],[-.58,0,0],rider);chest.scale.set(.27,.22,.29);
- const neck=part(new THREE.CylinderGeometry(.095,.11,.16,14),suit,[0,1.82,-.24],null,rider);
- const helmet=part(new THREE.SphereGeometry(.245,24,18),helmetMat,[0,1.99,-.43],null,rider);helmet.scale.set(1,.98,1.08);
- const visor=part(new THREE.SphereGeometry(1,18,12),visorMat,[0,2.00,-.60],null,rider);visor.scale.set(.18,.12,.09);
- for(const side of [-1,1]){
-  // arms angle forward to grips
-  beam([side*.22,1.72,-.17],[side*.30,1.52,-.48],.085,suit,rider);
-  beam([side*.30,1.52,-.48],[side*.49,1.31,-.76],.062,suitAccent,rider);
-  part(new THREE.BoxGeometry(.12,.10,.16),black,[side*.51,1.31,-.77],null,rider);
-  // bent thighs and lower legs, feet near pegs
-  beam([side*.17,1.39,.18],[side*.30,1.08,.48],.12,suit,rider);
-  beam([side*.30,1.08,.48],[side*.22,.76,.42],.085,suitAccent,rider);
-  part(new THREE.BoxGeometry(.15,.09,.24),black,[side*.22,.72,.34],null,rider);
- }
- const dummy=new THREE.Mesh(new THREE.BoxGeometry(.01,.01,.01),new THREE.MeshBasicMaterial({color}));dummy.visible=false;g.add(dummy);
- g.position.set(x,0,z);g.userData={wheels,body:dummy,rider,isBike:true,frontSteer,cabin:null,windshield:null,accessories:{}};scene.add(g);return g;
-}
 function createCar(color,x,z){
  const g=new THREE.Group();const body=box(1.8,.65,3.4,color,0,.65,0,g);const cabin=box(1.25,.7,1.55,0x172b40,0,1.25,-.15,g);
  // Kaca depan transparan mengisi bingkai A-pillar, supaya kabin tidak tampak bolong.
@@ -557,33 +354,26 @@ function createCar(color,x,z){
    new THREE.MeshPhysicalMaterial({color:0xa8e5ff,transparent:true,opacity:.20,roughness:.12,metalness:.08,side:THREE.DoubleSide,depthWrite:false})
  );
  windshield.position.set(0,1.49,-.835);windshield.rotation.x=-.06;g.add(windshield);
- const wheels=[],frontSteerPivots=[];
- for(const s of [-1,1])for(const f of [-1,1]){
-   // Pisahkan pivot belok dan grup putar roda agar rotasi yaw dan spin tidak saling mengganggu.
-   const steerPivot=new THREE.Group();
-   steerPivot.position.set(s*.95,.38,f*1.05);
-   g.add(steerPivot);
-   const spinGroup=new THREE.Group();
-   steerPivot.add(spinGroup);
+ const wheels=[];for(const s of [-1,1])for(const f of [-1,1]){
+   // Wheel pivot spins around the axle (X axis); tire and rim stay concentric.
+   const w=new THREE.Group();w.position.set(s*.95,.38,f*1.05);g.add(w);
    const tire=new THREE.Mesh(new THREE.CylinderGeometry(.37,.37,.25,24),mat(0x202328,.05,.82));
-   tire.rotation.z=Math.PI/2;tire.castShadow=true;tire.receiveShadow=true;spinGroup.add(tire);
+   tire.rotation.z=Math.PI/2;tire.castShadow=true;tire.receiveShadow=true;w.add(tire);
    const rims=[];
    for(const side of [-1,1]){
      const disc=new THREE.Mesh(new THREE.CylinderGeometry(.235,.235,.035,24),mat(0xb8c2cc,.86,.24));
-     disc.rotation.z=Math.PI/2;disc.position.x=side*.137;disc.castShadow=true;spinGroup.add(disc);rims.push(disc);
+     disc.rotation.z=Math.PI/2;disc.position.x=side*.137;disc.castShadow=true;w.add(disc);rims.push(disc);
      const ring=new THREE.Mesh(new THREE.TorusGeometry(.205,.025,8,24),mat(0xd5dde4,.9,.2));
-     ring.rotation.y=Math.PI/2;ring.position.x=side*.16;spinGroup.add(ring);rims.push(ring);
+     ring.rotation.y=Math.PI/2;ring.position.x=side*.16;w.add(ring);rims.push(ring);
      const hub=new THREE.Mesh(new THREE.CylinderGeometry(.075,.075,.045,16),mat(0x59636d,.85,.25));
-     hub.rotation.z=Math.PI/2;hub.position.x=side*.17;spinGroup.add(hub);rims.push(hub);
+     hub.rotation.z=Math.PI/2;hub.position.x=side*.17;w.add(hub);rims.push(hub);
      for(let spoke=0;spoke<5;spoke++){
        const a=spoke*Math.PI*2/5;
        const bar=new THREE.Mesh(new THREE.BoxGeometry(.025,.19,.045),mat(0xc2cbd2,.85,.22));
-       bar.position.set(side*.163,Math.sin(a)*.115,Math.cos(a)*.115);bar.rotation.x=a;spinGroup.add(bar);rims.push(bar);
+       bar.position.set(side*.163,Math.sin(a)*.115,Math.cos(a)*.115);bar.rotation.x=a;w.add(bar);rims.push(bar);
      }
    }
-   spinGroup.userData={tire,rims};
-   wheels.push(spinGroup);
-   if(f===-1)frontSteerPivots.push(steerPivot);
+   w.userData={tire,rims};wheels.push(w);
  }
  // Rear lamps (red) and front LED headlights (white).
  const rearLamps=[];const frontLamps=[];const headlightSpots=[];
@@ -609,10 +399,9 @@ function createCar(color,x,z){
  const pillarMat=mat(0x111923,.35,.5);
  const pillarL=box(.11,.66,.13,0x17212b,-.56,1.49,-.76,g);
  const pillarR=box(.11,.66,.13,0x17212b,.56,1.49,-.76,g);
- g.position.set(x,0,z);g.userData={wheels,frontSteerPivots,body,cabin,windshield,accessories:{},dash,dashTop,wheel,wheelHub,cockpitTrim,roofLiner,roofHighlight,pillarL,pillarR,rearLamps,frontLamps,headlightSpots};scene.add(g);return g
+ g.position.set(x,0,z);g.userData={wheels,body,cabin,windshield,accessories:{},dash,dashTop,wheel,wheelHub,cockpitTrim,roofLiner,roofHighlight,pillarL,pillarR,rearLamps,frontLamps,headlightSpots};scene.add(g);return g
 }
 function applyAccessories(car){
- if(car.userData.isBike)return;
  Object.values(car.userData.accessories).forEach(o=>car.remove(o));car.userData.accessories={};
  // Restore standard wheel finish first, then apply the equipped finish if owned.
  car.userData.wheels.forEach(w=>w.userData.rims.forEach(r=>r.material=mat(0x9aa4ad,.82,.25)));
@@ -663,7 +452,6 @@ function updateWeatherRain(dt){
 function createWorld(){
  const theme=MAP_THEMES[selectedMap]||MAP_THEMES.city;
  activeWorldMap=selectedMap;
- activeWorldVehicleIndex=saveData.selectedCar;
  activeWorldDifficulty=document.getElementById("difficulty")?.value||"normal";
  scene=new THREE.Scene();scene.background=new THREE.Color(theme.sky);scene.fog=new THREE.Fog(theme.fog,theme.fogNear,theme.fogFar);
  camera=new THREE.PerspectiveCamera(82,innerWidth/innerHeight,.05,500);camera.position.set(0,1.35,3);
@@ -730,7 +518,7 @@ function createWorld(){
  }
  // Simpan posisi awal dekorasi agar bisa dikembalikan saat balapan baru dimulai.
  scenery.forEach(o=>{o.userData.startZ=o.position.z});
- const selected=cars[saveData.selectedCar]||cars[0];player=selected.type==="bike"?createMotorcycle(selected.color,0,3):createCar(selected.color,0,3);applyAccessories(player);
+ const selected=cars[saveData.selectedCar]||cars[0];player=createCar(selected.color,0,3);applyAccessories(player);
  // Gerbang finish dibuat di depan lintasan dan bergerak mendekat seiring progres balapan.
  finishGate=new THREE.Group();
  const postMat=mat(0xf5f5f5), bannerMat=mat(0x151515);
@@ -752,16 +540,9 @@ function createWorld(){
  initialized=true
 }
 function createRival(i){const colors=[0x00aaff,0xffcc00,0x9900ff,0xffffff,0x00ff88];const laneIndex=Math.floor(Math.random()*3);const z=-35-i*30;const mesh=createCar(colors[i%colors.length],roadCenter(-z)+lanes[laneIndex],z);mesh.userData.laneIndex=laneIndex;const difficulty=document.getElementById("difficulty").value;
- // AI pace is measured against the player's base speed. Earlier ranges were
- // too conservative, so rivals fell behind even on Hard/Extreme.
- const pace={
-  easy:[.78,.90],
-  normal:[.98,1.10],
-  hard:[1.12,1.28],
-  extreme:[1.30,1.48]
- }[difficulty]||[.98,1.10];
- const cruiseSpeed=baseSpeed*(pace[0]+Math.random()*(pace[1]-pace[0]));
- rivals.push({mesh,speed:cruiseSpeed,cruiseSpeed,laneChangeTimer:3.5+Math.random()*4,laneOffset:lanes[laneIndex],targetLane:laneIndex})}
+ const botMin=difficulty==="easy"?.38:difficulty==="hard"?.58:.48;
+ const botMax=difficulty==="easy"?.48:difficulty==="hard"?.68:.58;
+ rivals.push({mesh,speed:baseSpeed*(botMin+Math.random()*(botMax-botMin)),laneChangeTimer:5+Math.random()*5,laneOffset:lanes[laneIndex],targetLane:laneIndex})}
 function createCoin(z){const c=new THREE.Mesh(new THREE.TorusGeometry(.45,.12,8,16),new THREE.MeshStandardMaterial({color:0xffd700,metalness:.8,roughness:.2,emissive:0x664400}));c.userData.laneIndex=Math.floor(Math.random()*3);c.position.set(roadCenter(-z)+lanes[c.userData.laneIndex],roadHeight(-z)+1,z);c.rotation.x=Math.PI/2;scene.add(c);coinObjects.push(c)}
 function collectCoin(c){scene.remove(c);const i=coinObjects.indexOf(c);if(i>=0)coinObjects.splice(i,1);raceCoins+=5;document.getElementById("raceCoins").textContent=raceCoins;showToast("+5 KOIN 🪙")}
 
@@ -795,7 +576,7 @@ function triggerCarExplosion(){
   player.userData.body.visible=false;
   ["cabin","windshield","roofLiner","roofHighlight","pillarL","pillarR"].forEach(k=>{if(player.userData[k])player.userData[k].visible=false});
  }
- showToast(cars[saveData.selectedCar]?.type==="bike"?"💥 MOTOR CRASH!":"💥 MOBIL MELEDAK!");
+ showToast("💥 MOBIL MELEDAK!");
  const burst=new THREE.Group();burst.position.copy(player.position);scene.add(burst);
  const particles=[];
  const colors=[0xffe066,0xff7a18,0xe83212,0x555555,0x222222];
@@ -836,11 +617,11 @@ function registerCollision(r){
  speed=Math.max(8,speed-8);
  // Dorong rival menjauh agar satu tabrakan tidak dihitung berulang.
  // Saat tabrakan, rival tetap pada jalur lintasannya tanpa teleport.
- r.speed=Math.max(baseSpeed*.72,r.speed*.92);
+ r.speed=Math.max(baseSpeed*.3,r.speed*.85);
  // Efek visual kerusakan: bodi makin gelap, kaca retak, asap saat kondisi rendah.
  const original=cars[saveData.selectedCar].color;
  const darkFactor=Math.max(.22,health/100);
- if(!player.userData.isBike)player.userData.body.material.color.setRGB(
+ player.userData.body.material.color.setRGB(
    ((original>>16)&255)/255*darkFactor,
    ((original>>8)&255)/255*darkFactor,
    (original&255)/255*darkFactor
@@ -906,11 +687,6 @@ function applyGraphicsSettings(){
 
 function applyControlMode(){
  const wheel=document.getElementById("steeringPad"),arrows=document.getElementById("arrowPad");
- const isBike=!!player?.userData?.isBike;
- const controls=document.getElementById("controls");
- if(controls)controls.classList.toggle("bike-mode",isBike);
- const caption=document.getElementById("steeringCaption");
- if(caption)caption.textContent=isBike?"GESER STANG ◀ ▶":"GESER SETIR ◀ ▶";
  if(wheel)wheel.style.display=controlMode==="wheel"?"flex":"none";
  if(arrows)arrows.style.display=controlMode==="arrows"?"flex":"none";
  const select=document.getElementById("controlMode");if(select)select.value=controlMode;
@@ -944,7 +720,7 @@ function saveSettings(){
 function startGame(){
  stopMusic();initVehicleAudio();if(musicEnabled)startMusic();
  if(!window.THREE){showToast("Three.js gagal dimuat. Periksa koneksi internet.");return}
- if(initialized && (activeWorldMap!==selectedMap || activeWorldDifficulty!==(document.getElementById("difficulty")?.value||"normal") || activeWorldVehicleIndex!==saveData.selectedCar)){
+ if(initialized && (activeWorldMap!==selectedMap || activeWorldDifficulty!==(document.getElementById("difficulty")?.value||"normal"))){
    if(renderer && renderer.domElement && renderer.domElement.parentNode)renderer.domElement.parentNode.removeChild(renderer.domElement);
    if(renderer)renderer.dispose();
    scene=null;camera=null;renderer=null;player=null;rivals=[];roadMarks=[];roadSegments=[];roadEdges=[];scenery=[];coinObjects=[];finishGate=null;damageMarks=[];smokeParticles=[];weatherRain=null;weatherRainPositions=null;weatherAmbient=null;weatherSun=null;initialized=false;
@@ -957,17 +733,15 @@ function startGame(){
  document.getElementById("hud").style.display="block";document.getElementById("controls").style.display="flex";
  const d=document.getElementById("difficulty").value;const multiplier=d==="easy"?.85:d==="hard"?1.3:d==="extreme"?1.38:1;baseSpeed=28*multiplier;
  speed=baseSpeed*(1+(saveData.upgrades.engine||0)*.035);score=0;raceCoins=0;nitro=100;lane=0;spawnTimer=0;raceDistance=0;health=100;driftPoints=0;nearMissCount=0;airborne=0;raceStartTime=performance.now();lastCollision=0;explosionActive=false;player.visible=true;
- if(player.userData.body)player.userData.body.visible=true;["cabin","windshield","roofLiner","roofHighlight","pillarL","pillarR"].forEach(k=>{if(player.userData[k])player.userData[k].visible=true});
- player.position.set(roadCenter(0),carRideY(0),3);const marker=document.getElementById("mapPlayer");if(marker)marker.textContent=(cars[saveData.selectedCar]||cars[0]).type==="bike"?"🏍️":"🚗";
+ player.userData.body.visible=true;["cabin","windshield","roofLiner","roofHighlight","pillarL","pillarR"].forEach(k=>{if(player.userData[k])player.userData[k].visible=true});
+ player.position.set(roadCenter(0),carRideY(0),3);
  player.rotation.set(roadPitch(0),roadAngle(0),0);
  player.updateMatrixWorld(true);
  // Reset camera immediately before countdown so a second race never shows the previous race's view.
  freeDragging=false;
  if(cameraMode==="first"){
-   const bike=!!player.userData.isBike;
-   if(bike&&player.userData.rider)player.userData.rider.visible=false;
-   const eye=player.localToWorld(bike?new THREE.Vector3(0,1.92,.02):new THREE.Vector3(0,1.53,.22));
-   const view=player.localToWorld(new THREE.Vector3(0,bike?1.78:1.48,-32));
+   const eye=player.localToWorld(new THREE.Vector3(0,1.53,.22));
+   const view=player.localToWorld(new THREE.Vector3(0,1.48,-32));
    camera.position.copy(eye);camera.lookAt(view);
  }else if(cameraMode==="free"){
    const target=player.position.clone();target.y+=1;
@@ -987,7 +761,7 @@ function startGame(){
  scenery.forEach(o=>{o.position.z=o.userData.startZ??o.position.z;o.position.x=roadCenter(-o.position.z)+(o.userData.sideOffset??0)});
  if(finishGate){finishGate.position.set(roadCenter(raceLength),roadHeight(raceLength),-raceLength);finishGate.rotation.y=roadAngle(raceLength);finishGate.rotation.x=roadPitch(raceLength)}
 
- document.getElementById("pauseScreen").style.display="none";if(player.userData.body?.material)player.userData.body.material.color.setHex((cars[saveData.selectedCar]||cars[0]).color);
+ document.getElementById("pauseScreen").style.display="none";player.userData.body.material.color.setHex((cars[saveData.selectedCar]||cars[0]).color);
  damageMarks.forEach(o=>player.remove(o));damageMarks=[];
  smokeParticles.forEach(o=>player.remove(o));smokeParticles=[];
  rivals.forEach(r=>scene.remove(r.mesh));rivals=[];coinObjects.forEach(c=>scene.remove(c));coinObjects=[];
@@ -1035,26 +809,10 @@ function animate(){
  player.position.x=THREE.MathUtils.lerp(player.position.x,roadCenter(playerRoadDistance)+lane*3,Math.min(1,dt*8));
  player.position.y=THREE.MathUtils.damp(player.position.y,carRideY(playerRoadDistance),14,dt);player.rotation.x=THREE.MathUtils.damp(player.rotation.x,roadPitch(playerRoadDistance),6,dt);
  player.rotation.y=THREE.MathUtils.lerp(player.rotation.y,roadAngle(playerRoadDistance),Math.min(1,dt*4));
- const steerInput=THREE.MathUtils.clamp((lane*3-(player.position.x-roadCenter(playerRoadDistance)))/3,-1,1);
- const leanFactor=THREE.MathUtils.clamp(speed/35,.35,1);
- if(player.userData.isBike && player.userData.wheels && player.userData.wheels[0]){
-   // Motor: fork depan membelok, badan motor ikut mengarah ke tikungan dan tetap memiliki efek miring.
-   if(player.userData.frontSteer)player.userData.frontSteer.rotation.y=THREE.MathUtils.damp(player.userData.frontSteer.rotation.y,-steeringInput*.42,10,dt);
-   player.rotation.y=THREE.MathUtils.damp(player.rotation.y,roadAngle(playerRoadDistance)-steeringInput*.22,8,dt);
-   player.rotation.z=THREE.MathUtils.damp(player.rotation.z,-steeringInput*.22*leanFactor,7,dt);
- } else if(player.userData.frontSteerPivots && player.userData.frontSteerPivots.length===2){
-   // Mobil: roda depan membelok; seluruh bodi ikut yaw ke arah belokan, roll halus tetap dipertahankan.
-   const frontWheelAngle=-steeringInput*.42;
-   player.userData.frontSteerPivots.forEach(pivot=>{
-     pivot.rotation.y=THREE.MathUtils.damp(pivot.rotation.y,frontWheelAngle,12,dt);
-   });
-   player.rotation.y=THREE.MathUtils.damp(player.rotation.y,roadAngle(playerRoadDistance)-steeringInput*.16,8,dt);
-   player.rotation.z=THREE.MathUtils.damp(player.rotation.z,-steeringInput*.105*leanFactor,7,dt);
- }
  const movement=speed*dt;
  updateWeatherRain(dt);
  // Putar velg pada poros roda sesuai jarak tempuh agar roda terlihat benar-benar berputar.
- if(player.userData.wheels)player.userData.wheels.forEach(w=>{w.rotation.x+=(speed/3.6)*dt/WHEEL_RADIUS});
+ if(player.userData.wheels)player.userData.wheels.forEach(w=>{w.rotation.x+=(speed/3.6)*dt/WHEEL_RADIUS*.12});
  raceDistance+=movement;
  if(finishGate){
    finishGate.position.z+=movement;
@@ -1077,23 +835,7 @@ function animate(){
  });
  scenery.forEach(o=>{o.position.z+=movement;if(o.position.z>440)o.position.z-=1260;o.position.x=roadCenter(raceDistance-o.position.z)+(o.userData.sideOffset|| (o.position.x<0?-14:14))});
  rivals.forEach(r=>{
-   // Rubber-band catch-up: rival yang tertinggal mendapat dorongan bertahap,
-   // tetapi tidak teleport dan tidak mendapat boost ketika sudah di depan.
-   const gapBehind = r.mesh.position.z - player.position.z; // positif = rival tertinggal
-   const difficulty = document.getElementById("difficulty").value;
-   const catchUpFactor = difficulty==="easy" ? 1.04 :
-                         difficulty==="normal" ? 1.13 :
-                         difficulty==="hard" ? 1.20 : 1.27;
-   let targetAiSpeed = r.cruiseSpeed;
-   if(gapBehind > 12){
-     const intensity = THREE.MathUtils.clamp((gapBehind-12)/55,0,1);
-     targetAiSpeed = Math.max(r.cruiseSpeed, speed*catchUpFactor + 2 + intensity*5);
-   }
-   // Jika AI sudah sangat jauh tertinggal, dorong lebih kuat agar kembali ke balapan.
-   if(gapBehind > 75) targetAiSpeed = Math.max(targetAiSpeed, speed*(catchUpFactor+.08));
-   // Jika AI kembali sejajar/depan, speed turun halus ke pace normal.
-   r.speed = THREE.MathUtils.damp(r.speed,targetAiSpeed,1.35,dt);
-   if(r.mesh.userData.wheels)r.mesh.userData.wheels.forEach(w=>{w.rotation.x+=(r.speed/3.6)*dt/WHEEL_RADIUS});
+   if(r.mesh.userData.wheels)r.mesh.userData.wheels.forEach(w=>{w.rotation.x+=(r.speed/3.6)*dt/WHEEL_RADIUS*.12});
    r.mesh.position.z+=(speed-r.speed)*dt;
    r.laneChangeTimer-=dt;
    if(r.laneChangeTimer<=0){
@@ -1125,21 +867,17 @@ function animate(){
  // Tiga mode kamera: sinematik, first-person, dan pandangan bebas.
  const hint=document.getElementById("cameraHint");
  if(cameraMode==="first"){
-   // Posisi first-person berbeda untuk mobil dan motor. Pada motor pengendara
-   // disembunyikan agar helm/tubuh tidak menutup layar; tangki dan stang tetap terlihat.
-   const bike=!!player.userData.isBike;
-   if(player.userData.rider)player.userData.rider.visible=!bike;
+   // Kamera kokpit: sembunyikan decal kerusakan di kap agar tidak tampak seperti bercak hitam.
    damageMarks.forEach(mark=>mark.visible=false);
    // Kap/bodi tetap terlihat di bawah, sementara kaca depan transparan menutup bingkai kabin.
    if(player.userData.body)player.userData.body.visible=true;
    if(player.userData.cabin)player.userData.cabin.visible=false;
    if(player.userData.windshield)player.userData.windshield.visible=true;
    ["roofLiner","roofHighlight","pillarL","pillarR"].forEach(k=>{if(player.userData[k])player.userData[k].visible=true});
-   const eye=player.localToWorld(bike?new THREE.Vector3(0,1.92,.02):new THREE.Vector3(0,1.53,.22));
-   const view=player.localToWorld(new THREE.Vector3(0,bike?1.78:1.48,-32));
+   const eye=player.localToWorld(new THREE.Vector3(0,1.53,.22));
+   const view=player.localToWorld(new THREE.Vector3(0,1.48,-32));
    camera.position.copy(eye);camera.lookAt(view);camera.up.set(0,1,0);
  }else if(cameraMode==="free"){
-   if(player.userData.rider)player.userData.rider.visible=true;
    damageMarks.forEach(mark=>mark.visible=true);
    if(player.userData.body)player.userData.body.visible=true;
    if(player.userData.cabin)player.userData.cabin.visible=true;
@@ -1152,7 +890,6 @@ function animate(){
    camera.lookAt(target);
    hint.style.display="block";
  }else{
-   if(player.userData.rider)player.userData.rider.visible=true;
    damageMarks.forEach(mark=>mark.visible=true);
    if(player.userData.body)player.userData.body.visible=true;
    if(player.userData.cabin)player.userData.cabin.visible=true;
@@ -1183,10 +920,7 @@ function updateHUD(){
  document.getElementById("mapProgress").style.width=progress+"%";
  document.getElementById("mapPlayer").style.left=progress+"%";
  document.getElementById("remainingDistance").textContent=distanceLeft+" m remaining";
- document.getElementById("distance").textContent=Math.min(raceLength,Math.floor(raceDistance));
-  const ahead=rivals.filter(r=>(raceDistance-r.mesh.position.z)>raceDistance+4).length;
-  const posEl=document.getElementById("position");if(posEl)posEl.textContent=String(ahead+1);
-  document.getElementById("health").textContent=health;document.getElementById("speed").textContent=Math.floor(speed*5.5);document.getElementById("score").textContent=score;document.getElementById("nitroValue").textContent=Math.floor(nitro);document.getElementById("position").textContent=1+rivals.filter(r=>r.mesh.position.z<player.position.z).length+(mpActive?Object.values(mpPlayers).filter(p=>p.id!==mpSocket?.id&&(p.distance||0)>raceDistance).length:0)}
+ document.getElementById("distance").textContent=Math.min(raceLength,Math.floor(raceDistance));document.getElementById("health").textContent=health;document.getElementById("speed").textContent=Math.floor(speed*5.5);document.getElementById("score").textContent=score;document.getElementById("nitroValue").textContent=Math.floor(nitro);document.getElementById("position").textContent=1+rivals.filter(r=>r.mesh.position.z<player.position.z).length+(mpActive?Object.values(mpPlayers).filter(p=>p.id!==mpSocket?.id&&(p.distance||0)>raceDistance).length:0)}
 function pauseGame(){if(!running)return;paused=true;silenceVehicleAudio();document.getElementById("pauseScreen").style.display="flex"}
 function resumeGame(){if(!running)return;paused=false;document.getElementById("pauseScreen").style.display="none";clock.start();animate()}
 function quitToMenu(){running=false;silenceVehicleAudio();startMusic();paused=false;countdownActive=false;keys={};document.getElementById("countdown").style.display="none";document.getElementById("pauseScreen").style.display="none";document.getElementById("hud").style.display="none";document.getElementById("controls").style.display="none";document.getElementById("menu").style.display="flex";updateCoins()}
@@ -1198,26 +932,17 @@ function finishGame(reason="FINISHED"){
  document.getElementById("hud").style.display="none";
  document.getElementById("controls").style.display="none";
  document.getElementById("finalScore").textContent=score;
- const rankEl=document.getElementById("finalRank");
- if(reason==="WRECKED"){
-   if(rankEl)rankEl.style.display="none";
- }else{
-   const finalRank=1+rivals.filter(r=>(raceDistance-r.mesh.position.z)>raceDistance+4).length;
-   const rankText=finalRank===1?"🥇 JUARA 1":finalRank===2?"🥈 JUARA 2":finalRank===3?"🥉 JUARA 3":`POSISI ${finalRank}`;
-   if(rankEl){rankEl.textContent=rankText;rankEl.style.display="block";}
-   else {const rank=document.createElement("h2");rank.id="finalRank";rank.textContent=rankText;document.querySelector("#result .panel").prepend(rank);}
- }
  document.getElementById("finalCoins").textContent=raceCoins;
  document.getElementById("totalCoins").textContent=saveData.coins;
- document.querySelector("#result h1").textContent=reason==="WRECKED"?(cars[saveData.selectedCar]?.type==="bike"?"MOTOR WRECKED":"CAR WRECKED"):"RACE FINISHED";
- document.querySelector("#result h2").textContent=reason==="WRECKED"?(cars[saveData.selectedCar]?.type==="bike"?"Motor mengalami kerusakan berat!":"Mobil rusak berat! Balapan berakhir."):"🏁 Garis finish berhasil dicapai!";
+ document.querySelector("#result h1").textContent=reason==="WRECKED"?"CAR WRECKED":"RACE FINISHED";
+ document.querySelector("#result h2").textContent=reason==="WRECKED"?"Mobil rusak berat! Balapan berakhir.":"🏁 Garis finish berhasil dicapai!";
  document.getElementById("result").style.display="flex";
 }
 function backToMenu(){running=false;mpActive=false;startMusic();document.getElementById("pauseScreen").style.display="none";document.getElementById("result").style.display="none";document.getElementById("hud").style.display="none";document.getElementById("controls").style.display="none";document.getElementById("menu").style.display="flex";updateCoins()}
 function openGarage(){running=false;document.getElementById("menu").style.display="none";document.getElementById("garage").style.display="flex";renderGarage()}
 function closeGarage(){document.getElementById("garage").style.display="none";document.getElementById("menu").style.display="flex";updateCoins();startMusic()}
-function renderGarage(){updateCoins();const selected=cars[saveData.selectedCar];document.getElementById("garageCar").textContent=selected.icon;document.getElementById("carName").textContent=selected.name;document.getElementById("carDescription").textContent=selected.description;document.getElementById("garage").querySelector("h2").textContent=selected.type==="bike"?"🏍️ MOTO GARAGE":"🚘 CAR GARAGE";const c=document.getElementById("carItems");c.innerHTML="";
- cars.forEach((car,i)=>{const owned=saveData.ownedCars.includes(i),active=saveData.selectedCar===i;const item=document.createElement("div");item.className="item";item.innerHTML=`<div class="icon">${car.icon}</div><b>${car.name}</b><p>${owned?"Sudah dimiliki":"Harga pembelian"}</p><div class="coins">${car.price} 🪙</div><button>${active?"DIPAKAI":owned?"PILIH":"BELI"}</button>`;const b=item.querySelector("button");b.disabled=active;b.onclick=()=>{if(owned){saveData.selectedCar=i;save();renderGarage()}else if(saveData.coins>=car.price){saveData.coins-=car.price;saveData.ownedCars.push(i);saveData.selectedCar=i;save();renderGarage();showToast(car.type==="bike"?"Motor berhasil dibeli!":"Mobil berhasil dibeli!")}else showToast("Koin belum cukup!")};c.appendChild(item)})}
+function renderGarage(){updateCoins();const selected=cars[saveData.selectedCar];document.getElementById("garageCar").textContent=selected.icon;document.getElementById("carName").textContent=selected.name;document.getElementById("carDescription").textContent=selected.description;const c=document.getElementById("carItems");c.innerHTML="";
+ cars.forEach((car,i)=>{const owned=saveData.ownedCars.includes(i),active=saveData.selectedCar===i;const item=document.createElement("div");item.className="item";item.innerHTML=`<div class="icon">${car.icon}</div><b>${car.name}</b><p>${owned?"Sudah dimiliki":"Harga pembelian"}</p><div class="coins">${car.price} 🪙</div><button>${active?"DIPAKAI":owned?"PILIH":"BELI"}</button>`;const b=item.querySelector("button");b.disabled=active;b.onclick=()=>{if(owned){saveData.selectedCar=i;save();renderGarage()}else if(saveData.coins>=car.price){saveData.coins-=car.price;saveData.ownedCars.push(i);saveData.selectedCar=i;save();renderGarage();showToast("Mobil berhasil dibeli!")}else showToast("Koin belum cukup!")};c.appendChild(item)})}
 function openShop(){running=false;document.getElementById("menu").style.display="none";document.getElementById("shop").style.display="flex";renderShop()}
 function closeShop(){document.getElementById("shop").style.display="none";document.getElementById("menu").style.display="flex";updateCoins();startMusic()}
 function renderShop(){updateCoins();const c=document.getElementById("accessoryItems");c.innerHTML="";accessories.forEach(a=>{const owned=saveData.accessories.includes(a.id),equipped=saveData.equipped.includes(a.id);const item=document.createElement("div");item.className="item";item.innerHTML=`<div class="icon">${a.icon}</div><b>${a.name}</b><p>${a.description}</p><div class="coins">${owned?"DIMILIKI":a.price+" 🪙"}</div><button>${equipped?"LEPAS":owned?"PASANG":"BELI"}</button>`;item.querySelector("button").onclick=()=>{if(owned){saveData.equipped=equipped?saveData.equipped.filter(id=>id!==a.id):[...saveData.equipped,a.id];save();if(player)applyAccessories(player);renderShop()}else if(saveData.coins>=a.price){saveData.coins-=a.price;saveData.accessories.push(a.id);save();renderShop();showToast("Aksesori berhasil dibeli!")}else showToast("Koin belum cukup!")};c.appendChild(item)})}
@@ -1416,7 +1141,6 @@ function showToast(msg){const t=document.getElementById("toast");t.textContent=m
 window.addEventListener("resize",()=>{if(!camera||!renderer)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
 updateCoins();
 initMapMenu();
-showNewLogsIfNeeded();
 </script>
 
 <div id="progressPanel">
