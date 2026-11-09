@@ -16,34 +16,69 @@ const io = new Server(server, {
 app.use(express.json({ limit: '1mb' }));
 
 // FIREBASE
-// Firebase failure must not crash multiplayer.
+// Keep the multiplayer server running even if Firebase credentials need repair.
 let db = null;
 let newsRef = null;
 
-try {
-  const rawServiceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
+function parseServiceAccount(raw) {
+  const text = String(raw || '').trim();
+  if (!text) throw new Error('FIREBASE_SERVICE_ACCOUNT kosong.');
 
-  if (!rawServiceAccount || !rawServiceAccount.trim()) {
-    throw new Error('FIREBASE_SERVICE_ACCOUNT belum disetel atau kosong.');
-  }
-
-  let serviceAccount;
-  const credentialText = rawServiceAccount.trim();
-
+  // First try normal JSON, which is the preferred format.
   try {
-    serviceAccount = JSON.parse(credentialText);
-  } catch (jsonError) {
+    return JSON.parse(text);
+  } catch (firstError) {
+    // Repair literal line breaks inside quoted JSON strings.
+    let repaired = '';
+    let inString = false;
+    let escaped = false;
+
+    for (const ch of text) {
+      if (inString) {
+        if (escaped) {
+          repaired += ch;
+          escaped = false;
+        } else if (ch === String.fromCharCode(92)) {
+          repaired += ch;
+          escaped = true;
+        } else if (ch === '"') {
+          repaired += ch;
+          inString = false;
+        } else if (ch === '\n') {
+          repaired += String.raw`\n`;
+        } else if (ch === '\r') {
+          // Ignore CR; the following LF is converted to \n.
+        } else {
+          repaired += ch;
+        }
+      } else {
+        repaired += ch;
+        if (ch === '"') inString = true;
+      }
+    }
+
     try {
-      serviceAccount = JSON.parse(
-        Buffer.from(credentialText, 'base64').toString('utf8')
-      );
+      return JSON.parse(repaired);
     } catch (_) {
-      throw new Error(
-        'FIREBASE_SERVICE_ACCOUNT bukan JSON valid atau Base64 JSON valid: ' +
-        jsonError.message
-      );
+      // Also accept Base64-encoded service-account JSON.
+      try {
+        return JSON.parse(
+          Buffer.from(text, 'base64').toString('utf8')
+        );
+      } catch (base64Error) {
+        throw new Error(
+          'FIREBASE_SERVICE_ACCOUNT bukan JSON valid. Periksa file service account dan tempel seluruh isinya tanpa mengubah karakter. Detail: ' +
+          firstError.message
+        );
+      }
     }
   }
+}
+
+try {
+  const serviceAccount = parseServiceAccount(
+    process.env.FIREBASE_SERVICE_ACCOUNT
+  );
 
   if (typeof serviceAccount.private_key === 'string') {
     serviceAccount.private_key =
@@ -61,7 +96,9 @@ try {
 
 } catch (error) {
   console.error('FIREBASE INITIALIZATION ERROR:', error.message);
-  console.error('Multiplayer tetap dijalankan; API berita sementara tidak tersedia.');
+  console.error(
+    'Multiplayer tetap dijalankan; API berita sementara tidak tersedia.'
+  );
 }
 
 function requireFirebase(res) {
@@ -81,11 +118,14 @@ async function getNews() {
     return doc.data();
   }
 
+  // Migrasi berita lama dari news.json jika tersedia.
   const oldFile = path.join(__dirname, 'news.json');
   let initial = { version: '1.0.0', items: [] };
 
   if (fs.existsSync(oldFile)) {
-    const oldData = JSON.parse(fs.readFileSync(oldFile, 'utf8'));
+    const oldData = JSON.parse(
+      fs.readFileSync(oldFile, 'utf8')
+    );
 
     initial = {
       version: oldData.version || '1.0.0',
@@ -116,7 +156,10 @@ function requireAdmin(req, res, next) {
   let decoded;
 
   try {
-    decoded = Buffer.from(header.slice(6), 'base64').toString('utf8');
+    decoded = Buffer.from(
+      header.slice(6),
+      'base64'
+    ).toString('utf8');
   } catch (e) {
     return res.status(401).json({
       error: 'Login tidak valid.'
@@ -140,7 +183,7 @@ function requireAdmin(req, res, next) {
   next();
 }
 
-// API NEWS
+// API NEWS UNTUK GAME DAN ADMIN
 app.get('/api/news', async (req, res) => {
   if (!requireFirebase(res)) return;
 
@@ -156,18 +199,22 @@ app.get('/api/news', async (req, res) => {
 
   } catch (error) {
     console.error('GET NEWS ERROR:', error);
+
     res.status(500).json({
       error: 'Gagal mengambil berita.'
     });
   }
 });
 
-// API SAVE NEWS
+// API SIMPAN NEWS DARI ADMIN PANEL
 app.put('/api/admin/news', requireAdmin, async (req, res) => {
   if (!requireFirebase(res)) return;
 
   try {
-    const version = String(req.body.version || '1.0.0').slice(0, 30);
+    const version = String(
+      req.body.version || '1.0.0'
+    ).slice(0, 30);
+
     const items = req.body.items;
 
     if (!Array.isArray(items)) {
@@ -217,7 +264,10 @@ function snapshot(room) {
     map: room.map,
     difficulty: room.difficulty,
     players: Object.fromEntries(
-      [...room.players].map(([id, p]) => [id, { ...p, id }])
+      [...room.players].map(([id, p]) => [
+        id,
+        { ...p, id }
+      ])
     )
   };
 }
@@ -283,7 +333,12 @@ io.on('connection', socket => {
       map: ['city', 'desert', 'coast'].includes(data?.map)
         ? data.map : 'city',
 
-      difficulty: ['easy', 'normal', 'hard', 'extreme'].includes(data?.difficulty)
+      difficulty: [
+        'easy',
+        'normal',
+        'hard',
+        'extreme'
+      ].includes(data?.difficulty)
         ? data.difficulty : 'normal',
 
       players: new Map()
@@ -307,7 +362,8 @@ io.on('connection', socket => {
 
   socket.on('join-room', data => {
     const roomCode = String(data?.code || '')
-      .toUpperCase().replace(/[^A-Z0-9]/g, '');
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, '');
 
     const room = rooms.get(roomCode);
 
@@ -382,12 +438,19 @@ io.on('connection', socket => {
   socket.on('start-race', data => {
     const room = rooms.get(socket.data.roomCode);
 
-    if (!room || room.hostId !== socket.id || room.started) return;
+    if (!room || room.hostId !== socket.id || room.started) {
+      return;
+    }
 
     room.map = ['city', 'desert', 'coast'].includes(data?.map)
       ? data.map : room.map;
 
-    room.difficulty = ['easy', 'normal', 'hard', 'extreme'].includes(data?.difficulty)
+    room.difficulty = [
+      'easy',
+      'normal',
+      'hard',
+      'extreme'
+    ].includes(data?.difficulty)
       ? data.difficulty : room.difficulty;
 
     room.started = true;
@@ -406,7 +469,6 @@ io.on('connection', socket => {
     if (!room || !room.started) return;
 
     const p = room.players.get(socket.id);
-
     if (!p) return;
 
     p.distance = Math.max(
@@ -446,7 +508,6 @@ io.on('connection', socket => {
 
   socket.on('leave-room', () => leave(socket));
   socket.on('disconnect', () => leave(socket));
-
 });
 
 // START SERVER
