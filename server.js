@@ -1,14 +1,133 @@
+
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
+const admin = require('firebase-admin');
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: '*' },
   pingInterval: 10000,
   pingTimeout: 20000
+});
+
+app.use(express.json({ limit: '1mb' }));
+
+// FIREBASE
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
+const newsRef = db.collection('gameContent').doc('news');
+
+async function getNews() {
+  const doc = await newsRef.get();
+
+  if (doc.exists) {
+    return doc.data();
+  }
+
+  // Migrasi berita lama dari news.json jika tersedia.
+  const oldFile = path.join(__dirname, 'news.json');
+  let initial = { version: '1.0.0', items: [] };
+
+  if (fs.existsSync(oldFile)) {
+    const oldData = JSON.parse(fs.readFileSync(oldFile, 'utf8'));
+    initial = {
+      version: oldData.version || '1.0.0',
+      items: Array.isArray(oldData.items) ? oldData.items :
+        Array.isArray(oldData) ? oldData : []
+    };
+  }
+
+  await newsRef.set({
+    ...initial,
+    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  });
+
+  return initial;
+}
+
+// AUTH ADMIN
+function requireAdmin(req, res, next) {
+  const header = req.headers.authorization || '';
+
+  if (!header.startsWith('Basic ')) {
+    return res.status(401).json({ error: 'Login admin diperlukan.' });
+  }
+
+  let decoded;
+
+  try {
+    decoded = Buffer.from(header.slice(6), 'base64').toString('utf8');
+  } catch (e) {
+    return res.status(401).json({ error: 'Login tidak valid.' });
+  }
+
+  const separator = decoded.indexOf(':');
+  const username = decoded.slice(0, separator);
+  const password = decoded.slice(separator + 1);
+
+  if (
+    separator < 0 ||
+    username !== process.env.ADMIN_USER ||
+    password !== process.env.ADMIN_PASSWORD
+  ) {
+    return res.status(401).json({ error: 'Username atau password salah.' });
+  }
+
+  next();
+}
+
+// API NEWS UNTUK GAME DAN ADMIN
+app.get('/api/news', async (req, res) => {
+  try {
+    const news = await getNews();
+    res.set('Cache-Control', 'no-store');
+    res.json({
+      version: news.version || '1.0.0',
+      items: news.items || []
+    });
+  } catch (error) {
+    console.error('GET NEWS ERROR:', error);
+    res.status(500).json({ error: 'Gagal mengambil berita.' });
+  }
+});
+
+// API SIMPAN NEWS DARI ADMIN PANEL
+app.put('/api/admin/news', requireAdmin, async (req, res) => {
+  try {
+    const version = String(req.body.version || '1.0.0').slice(0, 30);
+    const items = req.body.items;
+
+    if (!Array.isArray(items)) {
+      return res.status(400).json({ error: 'Format berita tidak valid.' });
+    }
+
+    if (items.length > 200) {
+      return res.status(400).json({ error: 'Maksimal 200 berita.' });
+    }
+
+    await newsRef.set({
+      version,
+      items,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    res.json({
+      success: true,
+      news: { version, items }
+    });
+  } catch (error) {
+    console.error('SAVE NEWS ERROR:', error);
+    res.status(500).json({ error: 'Gagal menyimpan berita ke Firebase.' });
+  }
 });
 
 const rooms = new Map();
@@ -104,23 +223,17 @@ io.on('connection', socket => {
     const room = rooms.get(roomCode);
 
     if (!room) {
-      socket.emit('room-error', {
-        message: 'Kode room tidak ditemukan.'
-      });
+      socket.emit('room-error', { message: 'Kode room tidak ditemukan.' });
       return;
     }
 
     if (room.started) {
-      socket.emit('room-error', {
-        message: 'Balapan di room ini sudah dimulai.'
-      });
+      socket.emit('room-error', { message: 'Balapan di room ini sudah dimulai.' });
       return;
     }
 
     if (room.players.size >= MAX_PLAYERS) {
-      socket.emit('room-error', {
-        message: 'Room sudah penuh (maksimal 8 pemain).'
-      });
+      socket.emit('room-error', { message: 'Room sudah penuh (maksimal 8 pemain).' });
       return;
     }
 
@@ -171,7 +284,6 @@ io.on('connection', socket => {
 
   socket.on('start-race', data => {
     const room = rooms.get(socket.data.roomCode);
-
     if (!room || room.hostId !== socket.id || room.started) return;
 
     room.map = ['city', 'desert', 'coast'].includes(data?.map)
@@ -211,7 +323,6 @@ io.on('connection', socket => {
 
   socket.on('player-finished', data => {
     const room = rooms.get(socket.data.roomCode);
-
     if (room) {
       socket.to(room.code).emit('player-finished', {
         id: socket.id,
@@ -223,51 +334,8 @@ io.on('connection', socket => {
   socket.on('leave-room', () => leave(socket));
   socket.on('disconnect', () => leave(socket));
 });
-app.use(express.json({ limit: '1mb' }));
-
-function requireAdmin(req, res, next) {
-  const auth = req.headers.authorization || '';
-  const expected = 'Basic ' + Buffer.from(
-    `${process.env.ADMIN_USER || 'admin'}:${process.env.ADMIN_PASSWORD || ''}`
-  ).toString('base64');
-
-  if (!process.env.ADMIN_PASSWORD || auth !== expected) {
-    res.set('WWW-Authenticate', 'Basic realm="Admin"');
-    return res.status(401).send('Unauthorized');
-  }
-
-  next();
-}
-
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
-
-app.get('/api/news', (req, res) => {
-  try {
-    const news = JSON.parse(
-      fs.readFileSync(path.join(__dirname, 'news.json'), 'utf8')
-    );
-    res.json(news);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to load news' });
-  }
-});
-
-app.put('/api/admin/news', requireAdmin, (req, res) => {
-  try {
-    fs.writeFileSync(
-      path.join(__dirname, 'news.json'),
-      JSON.stringify(req.body, null, 2)
-    );
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to save news' });
-  }
-});
 
 const port = process.env.PORT || 3000;
-
-server.listen(port, '0.0.0.0', () => {
-  console.log(`Asphalt Rush 3D multiplayer server listening on ${port}`);
-});
+server.listen(port, '0.0.0.0', () =>
+  console.log(`Asphalt Rush 3D multiplayer server listening on ${port}`)
+);
