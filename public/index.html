@@ -1541,12 +1541,108 @@ color:#222;
 font-weight:bold;
 ">
 🔐 LOGIN WITH GOOGLE
- </button>
- <script>
-(async function autoLandscape() {
-  async function lockLandscape() {
+
+<style>
+  #landscapeLock {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: radial-gradient(circle, #202b3d, #05070c 75%);
+    color: white;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 25px;
+    font-family: Arial, sans-serif;
+  }
+
+  #landscapeLock .rotate-icon {
+    font-size: 75px;
+    animation: rotatePhone 2s infinite ease-in-out;
+  }
+
+  #landscapeLock h2 {
+    color: #ffd447;
+    margin: 20px 0 10px;
+  }
+
+  #landscapeLock p {
+    color: #ddd;
+    line-height: 1.5;
+  }
+
+  #landscapeContinue {
+    display: none;
+    margin-top: 20px;
+    padding: 13px 28px;
+    border: 0;
+    border-radius: 10px;
+    background: #ffd447;
+    color: #111;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  @keyframes rotatePhone {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-90deg); }
+  }
+</style>
+
+<div id="landscapeLock">
+  <div class="rotate-icon">📱</div>
+  <h2>PUTAR LAYAR ANDA</h2>
+  <p>
+    ASPHALT & MOTO RUSH 3D<br>
+    hanya bisa dimainkan dalam posisi LANDSCAPE.
+  </p>
+  <button id="landscapeContinue">LANJUTKAN</button>
+</div>
+
+<script>
+(function () {
+  const overlay = document.getElementById("landscapeLock");
+  const continueButton = document.getElementById("landscapeContinue");
+
+  let pendingGameStart = false;
+  let originalStartGame = window.startGame;
+
+  function isMobilePortrait() {
+    return window.matchMedia("(pointer: coarse)").matches &&
+           window.innerHeight > window.innerWidth;
+  }
+
+  function updateLandscapeScreen() {
+    if (!isMobilePortrait()) {
+      overlay.style.display = "none";
+      continueButton.style.display = "none";
+
+      if (pendingGameStart) {
+        pendingGameStart = false;
+        originalStartGame();
+      }
+    } else if (pendingGameStart) {
+      overlay.style.display = "flex";
+      continueButton.style.display = "none";
+    }
+  }
+
+  window.startGame = function () {
+    if (isMobilePortrait()) {
+      pendingGameStart = true;
+      overlay.style.display = "flex";
+      continueButton.style.display = "block";
+      return;
+    }
+
+    originalStartGame();
+  };
+
+  continueButton.addEventListener("click", async function () {
     try {
-      if (!document.fullscreenElement) {
+      if (document.documentElement.requestFullscreen) {
         await document.documentElement.requestFullscreen();
       }
 
@@ -1554,13 +1650,19 @@ font-weight:bold;
         await screen.orientation.lock("landscape");
       }
     } catch (error) {
-      console.log("Landscape lock menunggu izin browser:", error);
+      // Jika browser tidak mendukung penguncian otomatis,
+      // pemain tetap bisa memutar perangkat secara manual.
     }
+
+    updateLandscapeScreen();
+  });
+
+  window.addEventListener("resize", updateLandscapeScreen);
+  window.addEventListener("orientationchange", updateLandscapeScreen);
+
+  if (screen.orientation) {
+    screen.orientation.addEventListener("change", updateLandscapeScreen);
   }
-
-  lockLandscape();
-
-  document.addEventListener("pointerdown", lockLandscape, { once: true });
 })();
 </script>
 </body>
