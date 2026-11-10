@@ -1644,17 +1644,36 @@ font-weight:bold;
   });
 
   // Tahan start balapan ketika masih portrait.
-  window.startGame = function() {
-    if (isPortrait()) {
-      pendingStart = true;
-      showLock();
-      return;
+  // Mulai balapan dengan meminta fullscreen dan landscape.
+window.startGame = async function() {
+  try {
+    if (!document.fullscreenElement &&
+        document.documentElement.requestFullscreen) {
+      await document.documentElement.requestFullscreen();
     }
+  } catch (error) {
+    console.log("Fullscreen tidak didukung:", error);
+  }
 
-    hideLock();
-    hideGoogle();
-    originalStartGame();
-  };
+  try {
+    if (screen.orientation && screen.orientation.lock) {
+      await screen.orientation.lock("landscape");
+    }
+  } catch (error) {
+    console.log("Landscape lock tidak didukung:", error);
+  }
+
+  if (isPortrait()) {
+    pendingStart = true;
+    showLock();
+    return;
+  }
+
+  pendingStart = false;
+  hideLock();
+  hideGoogle();
+  originalStartGame();
+};
 
   function checkOrientation() {
     if (isPortrait()) {
@@ -1690,24 +1709,8 @@ font-weight:bold;
     }
   }
 
-  button.addEventListener("click", async function(e) {
-    e.preventDefault();
-    e.stopPropagation ();
-
-    try {
-      if (document.documentElement.requestFullscreen) {
-        await document.documentElement.requestFullscreen();
-      }
-    } catch (err) {}
-
-    try {
-      if (screen.orientation && screen.orientation.lock) {
-        await screen.orientation.lock("landscape");
-      }
-    } catch (err) {}
-
-    checkOrientation();
-  });
+  
+    
 
   window.addEventListener("resize", checkOrientation);
   window.addEventListener("orientationchange", checkOrientation);
