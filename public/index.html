@@ -1542,5 +1542,26 @@ font-weight:bold;
 ">
 🔐 LOGIN WITH GOOGLE
  </button>
+ <script>
+(async function autoLandscape() {
+  async function lockLandscape() {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      }
+
+      if (screen.orientation && screen.orientation.lock) {
+        await screen.orientation.lock("landscape");
+      }
+    } catch (error) {
+      console.log("Landscape lock menunggu izin browser:", error);
+    }
+  }
+
+  lockLandscape();
+
+  document.addEventListener("pointerdown", lockLandscape, { once: true });
+})();
+</script>
 </body>
 </html>
