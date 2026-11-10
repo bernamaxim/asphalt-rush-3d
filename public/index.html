@@ -1436,5 +1436,61 @@ showNewLogsIfNeeded();
  <button class="secondary" onclick="closeProgress()">KEMBALI</button>
 </div>
 <div id="raceToast"></div>
+ <div id="christoSplash">
+  <div class="christo-light"></div>
+  <div class="christo-title">CHRISTO</div>
+  <div class="christo-subtitle">ASPHALT RUSH 3D</div>
+  <div class="christo-hint">TAP TO START</div>
+</div>
+
+<style>
+#christoSplash {
+  position:fixed; inset:0; z-index:999999;
+  background:radial-gradient(circle,#292018 0%,#050505 75%);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  color:#ffd700; font-family:Arial,sans-serif;
+  animation:christoFade 4s forwards;
+}
+.christo-title {
+  font-size:clamp(42px,12vw,90px);
+  font-weight:900; font-style:italic;
+  letter-spacing:8px;
+  color:#ffd700;
+  text-shadow:0 0 12px #ff9d00,0 0 35px #ff6500,4px 5px 0 #6b3500;
+  animation:christoZoom 1.2s ease-out;
+}
+.christo-subtitle {
+  margin-top:15px; letter-spacing:5px;
+  color:white; font-size:13px;
+}
+.christo-hint {
+  position:absolute; bottom:12%;
+  color:#fff; font-size:12px; letter-spacing:3px;
+  animation:christoBlink 1s infinite;
+}
+@keyframes christoZoom {
+  from {transform:scale(.3);opacity:0}
+  to {transform:scale(1);opacity:1}
+}
+@keyframes christoBlink {
+  50% {opacity:.25}
+}
+@keyframes christoFade {
+  0%,80% {opacity:1;visibility:visible}
+  100% {opacity:0;visibility:hidden;pointer-events:none}
+}
+#christoSplash {cursor:pointer}
+</style>
+<script>
+(function(){
+  const splash=document.getElementById("christoSplash");
+  if(!splash)return;
+  const remove=()=>splash.remove();
+  splash.addEventListener("click",remove);
+  splash.addEventListener("touchstart",remove,{once:true});
+  setTimeout(remove,4000);
+})();
+</script>
 </body>
 </html>
