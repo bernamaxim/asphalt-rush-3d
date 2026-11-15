@@ -249,6 +249,29 @@ app.put('/api/admin/news', requireAdmin, async (req, res) => {
   }
 });
 
+// GLOBAL LEADERBOARD — menampilkan statistik profil pemain dari Firestore.
+app.get('/api/leaderboard', async (req, res) => {
+  if (!db) return res.status(503).json({ error: 'Firebase belum tersedia.' });
+  try {
+    const snapshot = await db.collection('players').get();
+    const players = snapshot.docs.map(doc => {
+      const data = doc.data() || {};
+      const save = data.saveData || {};
+      return {
+        name: String(data.displayName || 'Racer').slice(0, 24),
+        level: Math.max(1, Number(save.level) || 1),
+        xp: Math.max(0, Number(save.xp) || 0),
+        races: Math.max(0, Number(save.races) || 0)
+      };
+    }).sort((a, b) => b.xp - a.xp || b.level - a.level || b.races - a.races).slice(0, 10);
+    res.set('Cache-Control', 'no-store');
+    res.json({ players });
+  } catch (error) {
+    console.error('LEADERBOARD ERROR:', error);
+    res.status(500).json({ error: 'Gagal mengambil leaderboard.' });
+  }
+});
+
 // MULTIPLAYER
 const rooms = new Map();
 const MAX_PLAYERS = 8;
